@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -12,12 +8,52 @@ namespace Jhu.Graywulf.Build.ConfigUtil
     public class Config
     {
         private string root;
+        private Project[] projects;
+        private Include[] includes;
 
         [XmlAttribute("root")]
         public string Root
         {
             get { return root; }
             set { root = value; }
+        }
+
+        [XmlArray("projects")]
+        [XmlArrayItem(ElementName = "project")]
+        public Project[] Projects
+        {
+            get { return projects; }
+            set { projects = value; }
+        }
+
+        [XmlArray("includes")]
+        [XmlArrayItem(ElementName = "include")]
+        public Include[] Includes
+        {
+            get { return includes; }
+            set { includes = value; }
+        }
+
+        public Config()
+        {
+            InitializeMembers();
+        }
+
+        private void InitializeMembers()
+        {
+            this.root = null;
+            this.projects = null;
+            this.includes = null;
+        }
+
+        public static Config LoadConfigFile(string path)
+        {
+            using (var infile = System.IO.File.Open(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.ReadWrite))
+            {
+                var s = new XmlSerializer(typeof(Config));
+                var config = (Config)s.Deserialize(infile);
+                return config;
+            }
         }
     }
 }

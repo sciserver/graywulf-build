@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace Jhu.Graywulf.Build.ConfigUtil
 {
-    class Program
+    public class Settings
     {
-        static void Main(string[] args)
-        {
+        private string configRoot;
 
+        public string ConfigRoot
+        {
+            get { return configRoot; }
+            set { configRoot = value; }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         {
             var s = new Solution();
             s.LoadSolution(GetTestSolutionPath());
-            var p = new Project(s);
+            var p = new SolutionProject(s);
             p.LoadProject(GetTestProjectPath());
         }
     }

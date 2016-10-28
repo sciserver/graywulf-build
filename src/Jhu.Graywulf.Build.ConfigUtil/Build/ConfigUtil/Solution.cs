@@ -9,7 +9,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
     public class Solution
     {
         private string path;
-        private List<Project> projects;
+        private List<SolutionProject> projects;
         public List<Config> configurations;
 
         public string Path
@@ -33,7 +33,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         public void LoadSolution(string path)
         {
             this.path = path;
-            this.projects = new List<Project>();
+            this.projects = new List<SolutionProject>();
 
             var parser_type = Type.GetType("Microsoft.Build.Construction.SolutionParser, Microsoft.Build, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
             var parser_solutionReader = parser_type.GetProperty("SolutionReader", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -61,7 +61,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
                 if ((type & Microsoft.Build.Construction.SolutionProjectType.KnownToBeMSBuildFormat) != 0)
                 {
                     var pp = (string)project_RelativePath.GetValue(project);
-                    var p = new Project(this);
+                    var p = new SolutionProject(this);
                     p.LoadProject(pp);
                     projects.Add(p);
                 }

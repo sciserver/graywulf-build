@@ -8,6 +8,9 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 {
     public class Constants
     {
-        public const string ConfigFileName = "gwconfig.xml";
+        public const string GraywulfConfig = "gwconfig.xml";
+        public const string AppConfig = "app.config";
+        public const string WebConfig = "web.config";
+        public const string BaseConfig = "base.config";
     }
 }
