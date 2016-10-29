@@ -2,6 +2,6 @@
 <!-- This is just a dummy config file for testing -->
 <config>
   <includes>
-    <include path="registry.config" />
+    <include path="test.config" />
   </includes>
 </config>

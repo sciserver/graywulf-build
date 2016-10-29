@@ -67,5 +67,13 @@ namespace Jhu.Graywulf.Build.ConfigUtil
                 }
             }
         }
+
+        public void MergeConfigs(Settings settings)
+        {
+            foreach (var project in projects)
+            {
+                project.MergeConfigs(settings);
+            }
+        }
     }
 }

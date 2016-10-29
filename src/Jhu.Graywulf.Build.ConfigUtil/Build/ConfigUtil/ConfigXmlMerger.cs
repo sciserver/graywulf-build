@@ -46,7 +46,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             // This can happen in case of the root nodes only
             if (comparer.Compare(orig.Name, merge.Name) != 0)
             {
-                throw new Exception("Incompatible nodes.");
+                throw Error.IncompatibleRootNodes(orig, merge);
             }
 
             MergeAttributes(orig, merge);

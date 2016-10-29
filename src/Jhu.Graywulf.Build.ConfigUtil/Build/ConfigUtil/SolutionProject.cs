@@ -12,7 +12,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         private string name;
         private string assemblyName;
         private ProjectType type;
-        private Config[] configs;
+        private List<Config> configs;
 
         [XmlIgnore]
         public Solution Solution
@@ -47,7 +47,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         }
 
         [XmlIgnore]
-        public Config[] Configs
+        public List<Config> Configs
         {
             get { return configs; }
         }
@@ -91,7 +91,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         /// Returns the absolute path of the project base config file
         /// </summary>
         /// <returns></returns>
-        private string GetProjectBaseConfigFile()
+        private string GetBaseConfigFile()
         {
             var path = GetProjectAbsolutePath();
             path = System.IO.Path.GetDirectoryName(path);
@@ -117,6 +117,10 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             return path;
         }
 
+        /// <summary>
+        /// Loads details from the csproj file
+        /// </summary>
+        /// <param name="path"></param>
         public void LoadProject(string path)
         {
             this.path = path;
@@ -160,11 +164,11 @@ namespace Jhu.Graywulf.Build.ConfigUtil
                 {
                     var guid = Guid.Parse(parts[i].Trim('{', '}'));
 
-                    if (guid == new Guid("349c5851-65df-11da-9384-00065b846f21"))
+                    if (guid == Constants.WebApplicationGuid)
                     {
                         this.type |= ProjectType.WebApplication;
                     }
-                    else if (guid == new Guid("3AC096D0-A1C2-E12C-1390-A8335801FDAB"))
+                    else if (guid == Constants.UnitTestGuid)
                     {
                         this.type |= ProjectType.UnitTest;
                     }
@@ -179,9 +183,10 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         /// </summary>
         public void FindConfigs()
         {
-            var res = new List<Config>();
             var dir = System.IO.Path.GetDirectoryName(GetProjectAbsolutePath());
             var slndir = System.IO.Path.GetFullPath(System.IO.Path.GetDirectoryName(solution.Path)).TrimEnd(System.IO.Path.DirectorySeparatorChar);
+
+            configs = new List<Config>();
 
             while (true)
             {
@@ -191,7 +196,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
                 if (System.IO.File.Exists(file))
                 {
                     var config = Config.LoadConfigFile(file);
-                    res.Add(config);
+                    configs.Add(config);
                 }
 
                 // If already in solution dir, exit
@@ -204,39 +209,56 @@ namespace Jhu.Graywulf.Build.ConfigUtil
                     dir = System.IO.Path.Combine(dir, "..");
                 }
             }
-
-            this.configs = res.ToArray();
         }
 
         public void MergeConfigs(Settings settings)
         {
             // Load base config file
-            var basexml = new XmlDocument();
-            basexml.Load(GetProjectBaseConfigFile());
+            var path = GetBaseConfigFile();
 
-            for (int c = 0; c < configs.Length; c++)
+            if (!System.IO.File.Exists(path))
             {
-                var config = configs[c];
-
-                // Merge in all top level includes
-                MergeConfigs(settings, basexml, config.Includes);
-
-                // Merge in matching project level includes
-                for (int p = 0; p < config.Projects.Length; p++)
+                if (settings.SkipMissingBaseConfig)
                 {
-                    var project = config.Projects[p];
-
-                    // Are the project names equal??
-                    // TODO
+                    return;
+                }
+                else
+                {
+                    throw Error.MissingBaseConfig(this);
                 }
             }
+
+            var basexml = new XmlDocument();
+            basexml.Load(path);
+
+            foreach(var config in configs)
+            {
+                // Merge in all top level includes, if any
+                if (config.Includes != null)
+                {
+                    MergeConfigs(settings, basexml, config.Includes);
+                }
+
+                // Merge in matching project level includes, if any
+                if (config.Projects != null)
+                {
+                    foreach (var project in config.Projects)
+                    {
+                        // Are the project names equal??
+                        // TODO
+                    }
+                }
+            }
+
+            // Write results
+            path = GetProjectConfigFile();
+            basexml.Save(path);
         }
 
-        private void MergeConfigs(Settings settings, XmlDocument basexml, Include[] includes)
+        private void MergeConfigs(Settings settings, XmlDocument basexml, List<Include> includes)
         {
-            for (int i = 0; i < includes.Length; i++)
+            foreach(var include in includes)
             {
-                var include = includes[i];
                 var incxml = include.LoadIncludeFile(settings, this);
 
                 ConfigXmlMerger.Merge(basexml, incxml);

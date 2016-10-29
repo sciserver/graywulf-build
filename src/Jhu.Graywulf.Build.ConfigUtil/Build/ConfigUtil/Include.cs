@@ -44,8 +44,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         {
             var path = GetAbsolutePath(settings, project);
             var xml = new XmlDocument();
-            xml.Load(GetAbsolutePath());
-
+            xml.Load(path);
             return xml;
         }
     }

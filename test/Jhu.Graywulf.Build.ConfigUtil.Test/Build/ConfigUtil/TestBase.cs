@@ -5,6 +5,14 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 {
     public abstract class TestBase
     {
+        protected string GetTestConfigPath()
+        {
+            var path = Environment.CurrentDirectory;
+            path = Path.Combine(path, @"..\..\..\..\test\config\");
+
+            return path;
+        }
+
         protected string GetTestSolutionPath()
         {
             var path = Environment.CurrentDirectory;

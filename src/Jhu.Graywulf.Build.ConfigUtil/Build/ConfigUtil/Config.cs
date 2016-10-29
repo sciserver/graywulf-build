@@ -1,4 +1,4 @@
-﻿
+﻿using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -8,8 +8,8 @@ namespace Jhu.Graywulf.Build.ConfigUtil
     public class Config
     {
         private string root;
-        private Project[] projects;
-        private Include[] includes;
+        private List<Project> projects;
+        private List<Include> includes;
 
         [XmlAttribute("root")]
         public string Root
@@ -20,7 +20,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
         [XmlArray("projects")]
         [XmlArrayItem(ElementName = "project")]
-        public Project[] Projects
+        public List<Project> Projects
         {
             get { return projects; }
             set { projects = value; }
@@ -28,7 +28,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
         [XmlArray("includes")]
         [XmlArrayItem(ElementName = "include")]
-        public Include[] Includes
+        public List<Include> Includes
         {
             get { return includes; }
             set { includes = value; }

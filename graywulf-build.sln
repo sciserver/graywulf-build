@@ -14,6 +14,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.ConfigUt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.ConfigUtil.Test", "test\Jhu.Graywulf.Build.ConfigUtil.Test\Jhu.Graywulf.Build.ConfigUtil.Test.csproj", "{47D56E75-0426-4FC9-8427-8EBDB1D41FE4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{0754B2A4-4B6E-40C4-B439-CF14ACE5DA69}"
+	ProjectSection(SolutionItems) = preProject
+		test\config\test.config = test\config\test.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,5 +40,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8C76A628-C4CD-4641-BD91-2CB7A1137A02} = {B69C4DAA-9A7C-4A2D-9654-51ABE8A9E1BA}
 		{47D56E75-0426-4FC9-8427-8EBDB1D41FE4} = {093CBAE0-04B3-4394-9092-4D9CA1C133D7}
+		{0754B2A4-4B6E-40C4-B439-CF14ACE5DA69} = {093CBAE0-04B3-4394-9092-4D9CA1C133D7}
 	EndGlobalSection
 EndGlobal

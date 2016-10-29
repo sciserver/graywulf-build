@@ -48,11 +48,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Build\ConfigUtil\Config.cs" />
+    <Compile Include="Build\ConfigUtil\ConfigException.cs" />
     <Compile Include="Build\ConfigUtil\ConfigXmlMerger.cs" />
     <Compile Include="Build\ConfigUtil\Constants.cs" />
+    <Compile Include="Build\ConfigUtil\Error.cs" />
+    <Compile Include="Build\ConfigUtil\ErrorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
     <Compile Include="Build\ConfigUtil\Include.cs" />
     <Compile Include="Build\ConfigUtil\Project.cs" />
     <Compile Include="Build\ConfigUtil\ProjectType.cs" />
+    <Compile Include="Build\ConfigUtil\Settings.cs" />
     <Compile Include="Build\ConfigUtil\Solution.cs" />
     <Compile Include="Build\ConfigUtil\SolutionProject.cs" />
     <Compile Include="Program.cs" />
@@ -61,7 +69,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Build\ConfigUtil\ErrorMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

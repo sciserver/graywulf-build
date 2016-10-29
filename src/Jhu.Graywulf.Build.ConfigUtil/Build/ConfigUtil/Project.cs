@@ -1,11 +1,12 @@
-﻿using System.Xml.Serialization;
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace Jhu.Graywulf.Build.ConfigUtil
 {
     public class Project
     {
         private string name;
-        private Include[] includes;
+        private List<Include> includes;
 
         public string Name
         {
@@ -15,7 +16,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
         [XmlArray("includes")]
         [XmlArrayItem(ElementName = "include")]
-        public Include[] Includes
+        public List<Include> Includes
         {
             get { return includes; }
             set { includes = value; }
