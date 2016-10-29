@@ -78,7 +78,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         /// Returns the absolute path of the project file
         /// </summary>
         /// <returns></returns>
-        private string GetProjectAbsolutePath()
+        public string GetProjectAbsolutePath()
         {
             var path = System.IO.Path.GetDirectoryName(solution.Path);
             path = System.IO.Path.Combine(path, this.path);

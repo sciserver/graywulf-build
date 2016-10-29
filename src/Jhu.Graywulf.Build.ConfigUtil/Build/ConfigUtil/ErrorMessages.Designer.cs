@@ -77,5 +77,23 @@ namespace Jhu.Graywulf.Build.ConfigUtil {
                 return ResourceManager.GetString("MissingBaseConfig", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Malformed xml file &apos;{0}&apos;..
+        /// </summary>
+        internal static string XmlFormatError {
+            get {
+                return ResourceManager.GetString("XmlFormatError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error loading xml file &apos;{0}&apos;..
+        /// </summary>
+        internal static string XmlLoadError {
+            get {
+                return ResourceManager.GetString("XmlLoadError", resourceCulture);
+            }
+        }
     }
 }

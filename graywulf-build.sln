@@ -16,6 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.ConfigUt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{0754B2A4-4B6E-40C4-B439-CF14ACE5DA69}"
 	ProjectSection(SolutionItems) = preProject
+		test\config\local.config = test\config\local.config
 		test\config\test.config = test\config\test.config
 	EndProjectSection
 EndProject

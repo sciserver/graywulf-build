@@ -123,4 +123,10 @@
   <data name="MissingBaseConfig" xml:space="preserve">
     <value>Base config file not found for project '{0}'.</value>
   </data>
+  <data name="XmlFormatError" xml:space="preserve">
+    <value>Malformed xml file '{0}'.</value>
+  </data>
+  <data name="XmlLoadError" xml:space="preserve">
+    <value>Error loading xml file '{0}'.</value>
+  </data>
 </root>

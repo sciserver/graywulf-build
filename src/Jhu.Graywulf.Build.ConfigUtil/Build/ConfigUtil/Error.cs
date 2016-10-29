@@ -16,5 +16,19 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             var msg = String.Format(ErrorMessages.IncompatibleRootNodes, node1.Name, node2.Name);
             return new ConfigException(msg);
         }
+
+        public static ConfigException XmlLoadError(Exception ex, string path)
+        {
+            var msg = String.Format(ErrorMessages.XmlLoadError, path);
+            return new ConfigException(msg, ex);
+        }
+
+        public static ConfigException XmlFormatError(XmlException ex, string path)
+        {
+            var msg = String.Format(ErrorMessages.XmlFormatError, path);
+            return new ConfigException(msg, ex);
+        }
+
+
     }
 }

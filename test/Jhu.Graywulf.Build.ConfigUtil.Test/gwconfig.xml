@@ -2,6 +2,7 @@
 <!-- This is just a dummy config file for testing -->
 <config>
   <includes>
-    <include path="test.config" />
+    <include path="test.config" global="true" />
+    <include path="..\config\local.config" />
   </includes>
 </config>
