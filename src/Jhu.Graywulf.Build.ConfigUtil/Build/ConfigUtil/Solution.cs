@@ -9,13 +9,18 @@ namespace Jhu.Graywulf.Build.ConfigUtil
     public class Solution
     {
         private string path;
-        private List<SolutionProject> projects;
+        private Dictionary<string, SolutionProject> projects;
         public List<Config> configurations;
 
         public string Path
         {
             get { return path; }
             set { path = value; }
+        }
+
+        public Dictionary<string, SolutionProject> Projects
+        {
+            get { return projects; }
         }
 
         public Solution()
@@ -33,7 +38,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         public void LoadSolution(string path)
         {
             this.path = path;
-            this.projects = new List<SolutionProject>();
+            this.projects = new Dictionary<string, SolutionProject>(StringComparer.InvariantCultureIgnoreCase);
 
             var parser_type = Type.GetType("Microsoft.Build.Construction.SolutionParser, Microsoft.Build, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
             var parser_solutionReader = parser_type.GetProperty("SolutionReader", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -63,17 +68,22 @@ namespace Jhu.Graywulf.Build.ConfigUtil
                     var pp = (string)project_RelativePath.GetValue(project);
                     var p = new SolutionProject(this);
                     p.LoadProject(pp);
-                    projects.Add(p);
+                    projects.Add(p.Name, p);
                 }
             }
         }
 
         public void MergeConfigs(Settings settings)
         {
-            foreach (var project in projects)
+            foreach (var project in projects.Values)
             {
                 project.MergeConfigs(settings);
             }
+        }
+
+        public override string ToString()
+        {
+            return path;
         }
     }
 }

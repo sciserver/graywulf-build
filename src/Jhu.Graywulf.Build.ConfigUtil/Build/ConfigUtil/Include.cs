@@ -6,8 +6,15 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 {
     public class Include
     {
+        private Config config;
         private string path;
-        private bool global;
+
+        [XmlIgnore]
+        public Config Config
+        {
+            get { return config; }
+            set { config = value; }
+        }
 
         [XmlAttribute("path")]
         public string Path
@@ -16,35 +23,8 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             set { path = value; }
         }
 
-        [XmlAttribute("global")]
-        public bool Global
+        public XmlDocument LoadIncludeFile(string path)
         {
-            get { return global; }
-            set { global = value; }
-        }
-
-        private string GetAbsolutePath(Settings settings, SolutionProject project)
-        {
-            string path = null;
-
-            if (global)
-            {
-                path = System.IO.Path.Combine(settings.ConfigRoot, this.path);
-            }
-            else
-            {
-                path = System.IO.Path.GetDirectoryName(project.GetProjectAbsolutePath());
-                path = System.IO.Path.Combine(path, this.path);
-            }
-
-            path = System.IO.Path.GetFullPath(path);
-            return path;
-        }
-
-        public XmlDocument LoadIncludeFile(Settings settings, SolutionProject project)
-        {
-            var path = GetAbsolutePath(settings, project);
-
             try
             {
                 var xml = new XmlDocument();

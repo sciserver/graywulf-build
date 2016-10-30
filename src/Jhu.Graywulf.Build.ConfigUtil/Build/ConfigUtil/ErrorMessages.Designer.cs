@@ -79,6 +79,15 @@ namespace Jhu.Graywulf.Build.ConfigUtil {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown project type &apos;{0}&apos;..
+        /// </summary>
+        internal static string UnknownProjectType {
+            get {
+                return ResourceManager.GetString("UnknownProjectType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Malformed xml file &apos;{0}&apos;..
         /// </summary>
         internal static string XmlFormatError {

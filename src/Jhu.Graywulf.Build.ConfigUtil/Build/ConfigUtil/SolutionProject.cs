@@ -142,16 +142,18 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             this.assemblyName = xml.SelectSingleNode("//msb:AssemblyName", ns).InnerText;
 
             // Project type
-            switch (xml.SelectSingleNode("//msb:OutputType", ns).InnerText.ToLowerInvariant())
+            var projectType = xml.SelectSingleNode("//msb:OutputType", ns).InnerText.ToLowerInvariant();
+            switch (projectType)
             {
                 case "exe":
+                case "winexe":
                     this.type = ProjectType.Executable;
                     break;
                 case "library":
                     this.type = ProjectType.ClassLibrary;
                     break;
                 default:
-                    throw new NotImplementedException();
+                    throw Error.UnknownProjectType(projectType);
             }
 
             // Is it a web application or unit test?
@@ -209,6 +211,9 @@ namespace Jhu.Graywulf.Build.ConfigUtil
                     dir = System.IO.Path.Combine(dir, "..");
                 }
             }
+
+            // Reverse, so that configs will be applied top-down
+            configs.Reverse();
         }
 
         public void MergeConfigs(Settings settings)
@@ -231,21 +236,29 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             var basexml = new XmlDocument();
             basexml.Load(path);
 
+            if (configs.Count == 0)
+            {
+                return;
+            }
+
+            string root = null;
+
             foreach(var config in configs)
             {
+                root = GetRootPath(root, config);
+
+                Console.WriteLine("Including files from config file '{0}'.", config.Path);
+
                 // Merge in all top level includes, if any
                 if (config.Includes != null)
                 {
-                    MergeConfigs(settings, basexml, config.Includes);
-                }
-
-                // Merge in matching project level includes, if any
-                if (config.Projects != null)
-                {
-                    foreach (var project in config.Projects)
+                    foreach (var include in config.Includes)
                     {
-                        // Are the project names equal??
-                        // TODO
+                        var incpath = GetIncludePath(root, include);
+                        var incxml = include.LoadIncludeFile(incpath);
+                        ConfigXmlMerger.Merge(basexml, incxml);
+
+                        Console.WriteLine("Merged configuration from '{0}'.", incpath);
                     }
                 }
             }
@@ -255,14 +268,38 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             basexml.Save(path);
         }
 
-        private void MergeConfigs(Settings settings, XmlDocument basexml, List<Include> includes)
+        private string GetRootPath(string root, Config config)
         {
-            foreach(var include in includes)
+            if (config.Root != null)
             {
-                var incxml = include.LoadIncludeFile(settings, this);
-
-                ConfigXmlMerger.Merge(basexml, incxml);
+                root = System.IO.Path.GetDirectoryName(config.Path);
+                root = System.IO.Path.Combine(root, config.Root);
             }
+
+            return root;
+        }
+
+        private string GetIncludePath(string root, Include include)
+        {
+            string path = null;
+
+            if (include.Path.StartsWith("/") || include.Path.StartsWith("\\"))
+            {
+                path = System.IO.Path.Combine(root, include.Path.Substring(1));
+            }
+            else
+            {
+                path = System.IO.Path.GetDirectoryName(include.Config.Path);
+                path = System.IO.Path.Combine(path, include.Path);
+            }
+
+            path = System.IO.Path.GetFullPath(path);
+            return path;
+        }
+
+        public override string ToString()
+        {
+            return name;
         }
     }
 }

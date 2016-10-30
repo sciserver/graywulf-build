@@ -7,15 +7,8 @@ using System.Threading.Tasks;
 namespace Jhu.Graywulf.Build.ConfigUtil
 {
     public class Settings
-    {
-        private string configRoot;
+    { 
         private bool skipMissingBaseConfig;
-
-        public string ConfigRoot
-        {
-            get { return configRoot; }
-            set { configRoot = value; }
-        }
 
         public bool SkipMissingBaseConfig
         {
@@ -30,7 +23,6 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
         private void InitializeMembers()
         {
-            this.configRoot = null;
             this.skipMissingBaseConfig = true;
         }
     }

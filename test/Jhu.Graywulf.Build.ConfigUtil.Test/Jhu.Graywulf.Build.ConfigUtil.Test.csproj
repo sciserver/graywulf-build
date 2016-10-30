@@ -68,7 +68,6 @@
     <Content Include="gwconfig.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="Base.config" />
   </ItemGroup>
   <Choose>

@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\MSBuild\14.0\Bin\Microsoft.Build.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\MSBuild\14.0\Bin\Microsoft.Build.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -58,7 +58,6 @@
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
     <Compile Include="Build\ConfigUtil\Include.cs" />
-    <Compile Include="Build\ConfigUtil\Project.cs" />
     <Compile Include="Build\ConfigUtil\ProjectType.cs" />
     <Compile Include="Build\ConfigUtil\Settings.cs" />
     <Compile Include="Build\ConfigUtil\Solution.cs" />
@@ -68,6 +67,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="post-build.ps1" />
+    <None Include="pre-build.ps1" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Build\ConfigUtil\ErrorMessages.resx">
@@ -76,6 +77,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>cd "$(ProjectDir)"
+powershell -file pre-build.ps1 $(SolutionDir) $(SolutionName) $(ProjectDir) $(ProjectName) $(OutDir) $(TargetName)</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>cd "$(ProjectDir)"
+powershell -file post-build.ps1 $(SolutionDir) $(SolutionName) $(ProjectDir) $(ProjectName) $(OutDir) $(TargetName)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

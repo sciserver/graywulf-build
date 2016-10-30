@@ -19,7 +19,6 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         {
             var settings = new Settings()
             {
-                ConfigRoot =  GetTestConfigPath(),
                 SkipMissingBaseConfig = true,
             };
 
@@ -35,7 +34,6 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         {
             var settings = new Settings()
             {
-                ConfigRoot = GetTestConfigPath(),
                 SkipMissingBaseConfig = false,
             };
 

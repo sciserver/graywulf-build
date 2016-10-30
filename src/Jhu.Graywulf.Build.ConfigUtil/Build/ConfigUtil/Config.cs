@@ -7,23 +7,22 @@ namespace Jhu.Graywulf.Build.ConfigUtil
     [XmlRoot("config")]
     public class Config
     {
+        private string path;
         private string root;
-        private List<Project> projects;
         private List<Include> includes;
+
+        [XmlIgnore]
+        public string Path
+        {
+            get { return path; }
+            set { path = value; }
+        }
 
         [XmlAttribute("root")]
         public string Root
         {
             get { return root; }
             set { root = value; }
-        }
-
-        [XmlArray("projects")]
-        [XmlArrayItem(ElementName = "project")]
-        public List<Project> Projects
-        {
-            get { return projects; }
-            set { projects = value; }
         }
 
         [XmlArray("includes")]
@@ -41,8 +40,8 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
         private void InitializeMembers()
         {
+            this.path = null;
             this.root = null;
-            this.projects = null;
             this.includes = null;
         }
 
@@ -52,8 +51,21 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             {
                 var s = new XmlSerializer(typeof(Config));
                 var config = (Config)s.Deserialize(infile);
+
+                config.path = path;
+
+                foreach (var include in config.includes)
+                {
+                    include.Config = config;
+                }
+
                 return config;
             }
+        }
+
+        public override string ToString()
+        {
+            return path;
         }
     }
 }

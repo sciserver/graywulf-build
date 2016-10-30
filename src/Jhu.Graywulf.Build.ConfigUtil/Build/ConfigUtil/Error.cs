@@ -29,6 +29,10 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             return new ConfigException(msg, ex);
         }
 
-
+        public static ConfigException UnknownProjectType(string projectType)
+        {
+            var msg = String.Format(ErrorMessages.UnknownProjectType, projectType);
+            return new ConfigException(msg);
+        }
     }
 }
