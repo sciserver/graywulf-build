@@ -8,8 +8,10 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 {
     public class SolutionProject
     {
-        private static readonly Regex VersionRegex1 = new Regex(@"(\[assembly\s*:\s*AssemblyVersion\s*\(\s*"")([^""]*)(""\s*\)\])");
-        private static readonly Regex VersionRegex2 = new Regex(@"(\[assembly\s*:\s*AssemblyFileVersion\s*\(\s*"")([^""]*)(""\s*\)\])");
+        private const string RegexStart = @"(\[\s*assembly\s*:\s*";
+        private const string RegexEnd = @"\s*\()([^\)]*)(\)\s*\])";
+        private static readonly Regex VersionRegex1 = new Regex(RegexStart + "AssemblyVersion" + RegexEnd);
+        private static readonly Regex VersionRegex2 = new Regex(RegexStart + "AssemblyFileVersion" + RegexEnd);
 
         private Solution solution;
         private string path;
@@ -207,7 +209,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
         private string ReplaceVersion(Match m)
         {
-            return m.Groups[1] + this.version + m.Groups[3];
+            return m.Groups[1] + "\"" + this.version + "\"" + m.Groups[3];
         }
         
         private string GetVersion()

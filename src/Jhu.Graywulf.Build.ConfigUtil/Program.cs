@@ -36,7 +36,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
             var settings = new Settings()
             {
-                SkipMissingBaseConfig = false,
+                SkipMissingBaseConfig = true,
             };
 
             var spath = args[1];
