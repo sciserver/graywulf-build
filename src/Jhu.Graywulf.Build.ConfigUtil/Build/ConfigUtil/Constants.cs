@@ -15,5 +15,8 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         public const string AppConfig = "app.config";
         public const string WebConfig = "web.config";
         public const string BaseConfig = "base.config";
+
+        public const string PropertiesFolder = "Properties";
+        public const string AssemblyInfo = "AssemblyInfo.cs";
     }
 }

@@ -9,6 +9,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
     {
         private string path;
         private string root;
+        private string version;
         private List<Include> includes;
 
         [XmlIgnore]
@@ -23,6 +24,13 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         {
             get { return root; }
             set { root = value; }
+        }
+
+        [XmlAttribute("version")]
+        public string Version
+        {
+            get { return version; }
+            set { version = value; }
         }
 
         [XmlArray("includes")]

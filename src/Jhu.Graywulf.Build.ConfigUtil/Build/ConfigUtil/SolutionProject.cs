@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
@@ -7,10 +8,14 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 {
     public class SolutionProject
     {
+        private static readonly Regex VersionRegex1 = new Regex(@"(\[assembly\s*:\s*AssemblyVersion\s*\(\s*"")([^""]*)(""\s*\)\])");
+        private static readonly Regex VersionRegex2 = new Regex(@"(\[assembly\s*:\s*AssemblyFileVersion\s*\(\s*"")([^""]*)(""\s*\)\])");
+
         private Solution solution;
         private string path;
         private string name;
         private string assemblyName;
+        private string version;
         private ProjectType type;
         private List<Config> configs;
 
@@ -69,6 +74,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             this.solution = null;
             this.path = null;
             this.name = null;
+            this.version = null;
             this.assemblyName = null;
             this.type = ProjectType.Unknown;
             this.configs = null;
@@ -178,6 +184,47 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             }
         }
 
+        public void UpdateVersion()
+        {
+            if (configs.Count == 0)
+            {
+                return;
+            }
+
+            this.version = GetVersion();
+
+            Console.WriteLine("Updating project version number to '{0}'.", version);
+
+            var path = GetProjectAbsolutePath();
+            path = System.IO.Path.GetDirectoryName(path);
+            path = System.IO.Path.Combine(path, Constants.PropertiesFolder, Constants.AssemblyInfo);
+
+            var code = System.IO.File.ReadAllText(path);
+            code = VersionRegex1.Replace(code, ReplaceVersion);
+            code = VersionRegex2.Replace(code, ReplaceVersion);
+            System.IO.File.WriteAllText(path, code);
+        }
+
+        private string ReplaceVersion(Match m)
+        {
+            return m.Groups[1] + this.version + m.Groups[3];
+        }
+        
+        private string GetVersion()
+        {
+            string version = null;
+
+            foreach (var config in configs)
+            {
+                if (config.Version != null)
+                {
+                    version = config.Version;
+                }
+            }
+
+            return version;
+        }
+
         /// <summary>
         /// Ascend in the file hierarcy from the project dir to the
         /// solution dir and collect config files that apply to the current
@@ -247,9 +294,11 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             {
                 root = GetRootPath(root, config);
 
+                // Update assembly info with version number
+
+                // Merge in all includes, if any
                 Console.WriteLine("Including files from config file '{0}'.", config.Path);
 
-                // Merge in all top level includes, if any
                 if (config.Includes != null)
                 {
                     foreach (var include in config.Includes)

@@ -53,11 +53,12 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             else if (args.Length == 3)
             {
                 // Configure a specific project
-                var pname = args[2];
+                var project = solution.Projects[args[2]];
 
-                Console.WriteLine("project '{0}'...", pname);
+                Console.WriteLine("project '{0}'...", project.Name);
 
-                solution.Projects[pname].MergeConfigs(settings);
+                project.MergeConfigs(settings);
+                project.UpdateVersion();
             }
             else
             {

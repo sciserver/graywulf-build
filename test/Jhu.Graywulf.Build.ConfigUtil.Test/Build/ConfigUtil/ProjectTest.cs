@@ -15,5 +15,14 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             var p = new SolutionProject(s);
             p.LoadProject(GetTestProjectPath());
         }
+
+        [TestMethod]
+        public void UpdateVersionTest()
+        {
+            var s = new Solution();
+            s.LoadSolution(GetTestSolutionPath());
+            var p = s.Projects["Jhu.Graywulf.Build.ConfigUtil.Test"];
+            p.UpdateVersion();
+        }
     }
 }
