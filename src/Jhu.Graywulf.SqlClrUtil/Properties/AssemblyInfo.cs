@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Graywulf SQL CLR Utility")]
 [assembly: AssemblyDescription("SQL CLR Compile-time utility")]
-[assembly: AssemblyConfiguration(Jhu.Graywulf.Copyright.InfoConfiguration)]
-[assembly: AssemblyCompany(Jhu.Graywulf.Copyright.InfoCompany)]
-[assembly: AssemblyProduct(Jhu.Graywulf.Copyright.InfoProduct)]
-[assembly: AssemblyCopyright(Jhu.Graywulf.Copyright.InfoCopyright)]
-[assembly: AssemblyTrademark(Jhu.Graywulf.Copyright.InfoTrademark)]
-[assembly: AssemblyCulture(Jhu.Graywulf.Copyright.InfoCulture)]
+[assembly: AssemblyConfiguration("")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
 
 [assembly: AssemblyVersion("1.2.6148.3")]
 
