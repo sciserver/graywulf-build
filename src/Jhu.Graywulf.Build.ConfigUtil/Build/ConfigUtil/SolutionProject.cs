@@ -197,6 +197,12 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
             var settings = GetAssemblySettings();
             var path = GetAssemblyInfoFile();
+            var dir = System.IO.Path.GetDirectoryName(path);
+
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
 
             using (var outfile = new StreamWriter(path))
             {
