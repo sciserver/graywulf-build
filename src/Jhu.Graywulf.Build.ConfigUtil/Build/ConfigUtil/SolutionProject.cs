@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Text.RegularExpressions;
+using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
@@ -8,16 +8,10 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 {
     public class SolutionProject
     {
-        private const string RegexStart = @"(\[\s*assembly\s*:\s*";
-        private const string RegexEnd = @"\s*\()([^\)]*)(\)\s*\])";
-        private static readonly Regex VersionRegex1 = new Regex(RegexStart + "AssemblyVersion" + RegexEnd);
-        private static readonly Regex VersionRegex2 = new Regex(RegexStart + "AssemblyFileVersion" + RegexEnd);
-
         private Solution solution;
         private string path;
         private string name;
         private string assemblyName;
-        private string version;
         private ProjectType type;
         private List<Config> configs;
 
@@ -76,7 +70,6 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             this.solution = null;
             this.path = null;
             this.name = null;
-            this.version = null;
             this.assemblyName = null;
             this.type = ProjectType.Unknown;
             this.configs = null;
@@ -121,6 +114,15 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             var path = GetProjectAbsolutePath();
             path = System.IO.Path.GetDirectoryName(path);
             path = System.IO.Path.Combine(path, file);
+
+            return path;
+        }
+
+        private string GetAssemblyInfoFile()
+        {
+            var path = GetProjectAbsolutePath();
+            path = System.IO.Path.GetDirectoryName(path);
+            path = System.IO.Path.Combine(path, Constants.PropertiesFolder, Constants.AssemblyInfo);
 
             return path;
         }
@@ -186,46 +188,52 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             }
         }
 
-        public void UpdateVersion()
+        public void GenerateAssemblyInfoFile()
         {
             if (configs.Count == 0)
             {
                 return;
             }
 
-            this.version = GetVersion();
+            var settings = GetAssemblySettings();
+            var path = GetAssemblyInfoFile();
 
-            Console.WriteLine("Updating project version number to '{0}'.", version);
-
-            var path = GetProjectAbsolutePath();
-            path = System.IO.Path.GetDirectoryName(path);
-            path = System.IO.Path.Combine(path, Constants.PropertiesFolder, Constants.AssemblyInfo);
-
-            var code = System.IO.File.ReadAllText(path);
-            code = VersionRegex1.Replace(code, ReplaceVersion);
-            code = VersionRegex2.Replace(code, ReplaceVersion);
-            System.IO.File.WriteAllText(path, code);
+            using (var outfile = new StreamWriter(path))
+            {
+                settings.WriteAssemblyInfoFile(outfile, this);
+            }
         }
 
-        private string ReplaceVersion(Match m)
+        private AssemblySettings GetAssemblySettings()
         {
-            return m.Groups[1] + "\"" + this.version + "\"" + m.Groups[3];
-        }
-        
-        private string GetVersion()
-        {
-            string version = null;
+            var settings = new AssemblySettings();
 
             foreach (var config in configs)
             {
-                if (config.Version != null)
+                if (config.AssemblySettings != null)
                 {
-                    version = config.Version;
+                    settings.Merge(config.AssemblySettings);
                 }
             }
 
-            return version;
+            return settings;
         }
+
+        public void UpdateAssemblyInfoFileVersion()
+        {
+            if (configs.Count == 0)
+            {
+                return;
+            }
+
+            var settings = GetAssemblySettings();
+
+            Console.WriteLine("Updating project version number to '{0}'.", settings.Version);
+
+            var path = GetAssemblyInfoFile();
+            settings.UpdateAssemblyInfoFileVersion(path);
+        }
+      
 
         /// <summary>
         /// Ascend in the file hierarcy from the project dir to the

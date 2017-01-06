@@ -9,8 +9,8 @@ namespace Jhu.Graywulf.Build.ConfigUtil
     {
         private string path;
         private string root;
-        private string version;
         private List<Include> includes;
+        private AssemblySettings assemblySettings;
 
         [XmlIgnore]
         public string Path
@@ -26,19 +26,19 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             set { root = value; }
         }
 
-        [XmlAttribute("version")]
-        public string Version
-        {
-            get { return version; }
-            set { version = value; }
-        }
-
         [XmlArray("includes")]
         [XmlArrayItem(ElementName = "include")]
         public List<Include> Includes
         {
             get { return includes; }
             set { includes = value; }
+        }
+
+        [XmlElement("assemblySettings")]
+        public AssemblySettings AssemblySettings
+        {
+            get { return assemblySettings; }
+            set { assemblySettings = value; }
         }
 
         public Config()
@@ -51,6 +51,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             this.path = null;
             this.root = null;
             this.includes = null;
+            this.assemblySettings = null;
         }
 
         public static Config LoadConfigFile(string path)

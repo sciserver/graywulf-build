@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Build\ConfigUtil\AssemblySettings.cs" />
     <Compile Include="Build\ConfigUtil\Config.cs" />
     <Compile Include="Build\ConfigUtil\ConfigException.cs" />
     <Compile Include="Build\ConfigUtil\ConfigXmlMerger.cs" />

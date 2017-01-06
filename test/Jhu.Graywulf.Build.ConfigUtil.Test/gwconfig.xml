@@ -1,6 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- This is just a dummy config file for testing -->
 <config>
+  <assemblySettings 
+    title="Jhu.Graywulf.Build.ConfigUtil.Test"
+    sescription="Graywulf config util test project."
+    configuration="Test"
+    company="JHU IDIES / ELTE"
+    product="Graywulf"
+    copyright="Copyright ©  2008-2017 JHU IDIES / ELTE"
+    trademark=""
+    culture="">
+    <internals>
+      <visibleTo>Jhu.Graywulf.Build.ConfigUtil.Test</visibleTo>
+    </internals>
+  </assemblySettings>
   <includes>
     <include path="\test.config" />
     <include path="..\config\local.config" />

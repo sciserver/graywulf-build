@@ -58,7 +58,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
                 Console.WriteLine("project '{0}'...", project.Name);
 
                 project.MergeConfigs(settings);
-                project.UpdateVersion();
+                project.GenerateAssemblyInfoFile();
             }
             else
             {
