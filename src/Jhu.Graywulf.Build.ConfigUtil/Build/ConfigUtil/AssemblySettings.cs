@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -25,6 +26,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         private string culture;
         private string version;
         private string fileVersion;
+        private string hash;
         private List<string> internalsVisibleTo;
 
         [XmlAttribute("title")]
@@ -97,6 +99,13 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             set { fileVersion = value; }
         }
 
+        [XmlAttribute("hash")]
+        public string Hash
+        {
+            get { return hash; }
+            set { hash = value; }
+        }
+
         [XmlArray("internals")]
         [XmlArrayItem("visibleTo")]
         public List<string> InternalsVisibleTo
@@ -123,6 +132,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             this.version = null;
             this.fileVersion = null;
             this.internalsVisibleTo = null;
+            this.hash = null;
         }
 
         public void Merge(AssemblySettings other)
@@ -137,6 +147,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             this.culture = other.culture ?? this.culture;
             this.version = other.version ?? this.version;
             this.fileVersion = other.fileVersion ?? this.fileVersion;
+            this.hash = other.hash ?? this.hash;
 
             if (other.internalsVisibleTo != null)
             {
@@ -158,7 +169,14 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             outfile.WriteLine("using System.Runtime.InteropServices;");
             outfile.WriteLine();
 
-            WriteAssemblyAttribute(outfile, "AssemblyTitle", title ?? project.Name);
+            var title = this.title ?? project.Name;
+
+            if (!String.IsNullOrWhiteSpace(hash))
+            {
+                title += " (" + hash + ")";
+            }
+
+            WriteAssemblyAttribute(outfile, "AssemblyTitle", title);
             WriteAssemblyAttribute(outfile, "AssemblyDescription", description);
             WriteAssemblyAttribute(outfile, "AssemblyConfiguration", configuration);
             WriteAssemblyAttribute(outfile, "AssemblyCompany", company);

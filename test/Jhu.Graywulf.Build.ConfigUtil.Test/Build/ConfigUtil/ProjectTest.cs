@@ -17,6 +17,15 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         }
 
         [TestMethod]
+        public void GetGitCommitHashTest()
+        {
+            var s = new Solution();
+            s.LoadSolution(GetTestSolutionPath());
+            var p = s.Projects["Jhu.Graywulf.Build.ConfigUtil.Test"];
+            p.GetGitCommitHash();
+        }
+
+        [TestMethod]
         public void GenerateAssemblyInfoFileTest()
         {
             var s = new Solution();

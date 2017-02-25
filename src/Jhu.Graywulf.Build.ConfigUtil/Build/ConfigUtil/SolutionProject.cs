@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Jhu.Graywulf.Build.ConfigUtil
 {
@@ -204,6 +205,8 @@ namespace Jhu.Graywulf.Build.ConfigUtil
                 Directory.CreateDirectory(dir);
             }
 
+            settings.Hash = GetGitCommitHash();
+
             using (var outfile = new StreamWriter(path))
             {
                 settings.WriteAssemblyInfoFile(outfile, this);
@@ -360,6 +363,26 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
             path = System.IO.Path.GetFullPath(path);
             return path;
+        }
+
+        public string GetGitCommitHash()
+        {
+            var dir = System.IO.Path.GetDirectoryName(GetProjectAbsolutePath());
+            var pinfo = new ProcessStartInfo()
+            {
+                WorkingDirectory = dir,
+                FileName = "git.exe",
+                Arguments = "log --pretty=format:%H -n 1",
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+
+            var p = Process.Start(pinfo);
+            p.WaitForExit();
+            var hash = p.StandardOutput.ReadToEnd();
+
+            return hash;
         }
 
         public override string ToString()
