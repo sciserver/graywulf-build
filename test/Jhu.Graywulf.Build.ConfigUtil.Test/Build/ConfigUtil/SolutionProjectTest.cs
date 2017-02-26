@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Jhu.Graywulf.Build.ConfigUtil
 {
     [TestClass]
-    public class ProjectTest : TestBase
+    public class SolutionProjectTest : TestBase
     {
         [TestMethod]
         public void LoadProjectTest()
@@ -14,15 +14,6 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             s.LoadSolution(GetTestSolutionPath());
             var p = new SolutionProject(s);
             p.LoadProject(GetTestProjectPath());
-        }
-
-        [TestMethod]
-        public void GetGitCommitHashTest()
-        {
-            var s = new Solution();
-            s.LoadSolution(GetTestSolutionPath());
-            var p = s.Projects["Jhu.Graywulf.Build.ConfigUtil.Test"];
-            p.GetGitCommitHash();
         }
 
         [TestMethod]

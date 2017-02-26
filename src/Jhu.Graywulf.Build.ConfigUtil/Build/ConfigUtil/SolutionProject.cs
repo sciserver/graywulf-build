@@ -3,7 +3,6 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Jhu.Graywulf.Build.ConfigUtil
 {
@@ -205,12 +204,29 @@ namespace Jhu.Graywulf.Build.ConfigUtil
                 Directory.CreateDirectory(dir);
             }
 
-            settings.Hash = GetGitCommitHash();
+            var gitinfo = GetGitCommitInfo(settings.Prefix);
+
+            if (settings.Title == null)
+            {
+                settings.Title = this.Name;
+            }
+
+            settings.Title += " (" + gitinfo.Hash + ")";
+            settings.Version = gitinfo.Version + "." + gitinfo.Revision.ToString();
 
             using (var outfile = new StreamWriter(path))
             {
                 settings.WriteAssemblyInfoFile(outfile, this);
             }
+        }
+
+        public GitCommitInfo GetGitCommitInfo(string prefix)
+        {
+            var repodir = System.IO.Path.GetDirectoryName(GetProjectAbsolutePath());
+            var gitinfo = new GitCommitInfo();
+            gitinfo.Load(repodir, prefix);
+
+            return gitinfo;
         }
 
         private AssemblySettings GetAssemblySettings()
@@ -363,26 +379,6 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
             path = System.IO.Path.GetFullPath(path);
             return path;
-        }
-
-        public string GetGitCommitHash()
-        {
-            var dir = System.IO.Path.GetDirectoryName(GetProjectAbsolutePath());
-            var pinfo = new ProcessStartInfo()
-            {
-                WorkingDirectory = dir,
-                FileName = "git.exe",
-                Arguments = "log --pretty=format:%H -n 1",
-                RedirectStandardOutput = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            };
-
-            var p = Process.Start(pinfo);
-            p.WaitForExit();
-            var hash = p.StandardOutput.ReadToEnd();
-
-            return hash;
         }
 
         public override string ToString()

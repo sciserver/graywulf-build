@@ -58,6 +58,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </Compile>
+    <Compile Include="Build\ConfigUtil\GitCommitInfo.cs" />
     <Compile Include="Build\ConfigUtil\Include.cs" />
     <Compile Include="Build\ConfigUtil\ProjectType.cs" />
     <Compile Include="Build\ConfigUtil\Settings.cs" />

@@ -16,6 +16,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         private static readonly Regex VersionRegex1 = new Regex(RegexStart + "AssemblyVersion" + RegexEnd);
         private static readonly Regex VersionRegex2 = new Regex(RegexStart + "AssemblyFileVersion" + RegexEnd);
 
+        private string prefix;
         private string title;
         private string description;
         private string configuration;
@@ -26,8 +27,14 @@ namespace Jhu.Graywulf.Build.ConfigUtil
         private string culture;
         private string version;
         private string fileVersion;
-        private string hash;
         private List<string> internalsVisibleTo;
+
+        [XmlAttribute("prefix")]
+        public string Prefix
+        {
+            get { return prefix; }
+            set { prefix = value; }
+        }
 
         [XmlAttribute("title")]
         public string Title
@@ -99,13 +106,6 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             set { fileVersion = value; }
         }
 
-        [XmlAttribute("hash")]
-        public string Hash
-        {
-            get { return hash; }
-            set { hash = value; }
-        }
-
         [XmlArray("internals")]
         [XmlArrayItem("visibleTo")]
         public List<string> InternalsVisibleTo
@@ -121,6 +121,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
 
         private void InitializeMembers()
         {
+            this.prefix = null;
             this.title = null;
             this.description = null;
             this.configuration = null;
@@ -132,11 +133,11 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             this.version = null;
             this.fileVersion = null;
             this.internalsVisibleTo = null;
-            this.hash = null;
         }
 
         public void Merge(AssemblySettings other)
         {
+            this.prefix = other.prefix ?? this.prefix;
             this.title = other.title ?? this.title;
             this.description = other.description ?? this.description;
             this.configuration = other.configuration ?? this.configuration;
@@ -147,7 +148,6 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             this.culture = other.culture ?? this.culture;
             this.version = other.version ?? this.version;
             this.fileVersion = other.fileVersion ?? this.fileVersion;
-            this.hash = other.hash ?? this.hash;
 
             if (other.internalsVisibleTo != null)
             {
@@ -168,13 +168,6 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             outfile.WriteLine("using System.Runtime.CompilerServices;");
             outfile.WriteLine("using System.Runtime.InteropServices;");
             outfile.WriteLine();
-
-            var title = this.title ?? project.Name;
-
-            if (!String.IsNullOrWhiteSpace(hash))
-            {
-                title += " (" + hash + ")";
-            }
 
             WriteAssemblyAttribute(outfile, "AssemblyTitle", title);
             WriteAssemblyAttribute(outfile, "AssemblyDescription", description);

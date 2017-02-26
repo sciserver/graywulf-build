@@ -53,7 +53,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Build\ConfigUtil\ProjectTest.cs" />
+    <Compile Include="Build\ConfigUtil\GitCommitInfoTest.cs" />
+    <Compile Include="Build\ConfigUtil\SolutionProjectTest.cs" />
     <Compile Include="Build\ConfigUtil\SolutionTest.cs" />
     <Compile Include="Build\ConfigUtil\TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
