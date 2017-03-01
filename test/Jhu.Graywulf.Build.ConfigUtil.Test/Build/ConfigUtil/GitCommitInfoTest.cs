@@ -13,7 +13,7 @@ namespace Jhu.Graywulf.Build.ConfigUtil
             var s = new Solution();
             s.LoadSolution(GetTestSolutionPath());
             var p = s.Projects["Jhu.Graywulf.Build.ConfigUtil.Test"];
-            var gitinfo = p.GetGitCommitInfo("skyquery");
+            var gitinfo = p.GetGitCommitInfo("graywulf");
 
             Assert.IsNotNull(gitinfo.Hash);   
             Assert.IsNotNull(gitinfo.Tag);
