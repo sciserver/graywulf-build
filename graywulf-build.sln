@@ -20,11 +20,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{0754B2
 		test\config\test.config = test\config\test.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.Tasks", "src\Jhu.Graywulf.Build.Tasks\Jhu.Graywulf.Build.Tasks.csproj", "{9EDA43B0-AABD-48C4-87B9-EE3BDC0941C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build", "src\Jhu.Graywulf.Build\Jhu.Graywulf.Build.csproj", "{9EDA43B0-AABD-48C4-87B9-EE3BDC0941C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.Tasks.Test", "test\Jhu.Graywulf.Build.Tasks.Test\Jhu.Graywulf.Build.Tasks.Test.csproj", "{9B3284C2-66A0-43F6-9FB9-0418459EF48E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.Test", "test\Jhu.Graywulf.Build.Tasks.Test\Jhu.Graywulf.Build.Test.csproj", "{9B3284C2-66A0-43F6-9FB9-0418459EF48E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.SqlClrUtil", "src\Jhu.Graywulf.SqlClrUtil\Jhu.Graywulf.SqlClrUtil.csproj", "{CC75D904-89FB-40CD-9EA3-55359FFE1540}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Imports", "Imports", "{EACF5D86-6ACF-400D-B5C4-E368D3648284}"
+	ProjectSection(SolutionItems) = preProject
+		build\Jhu.Graywulf.Build.targets = build\Jhu.Graywulf.Build.targets
+		build\Jhu.Graywulf.Build.tasks = build\Jhu.Graywulf.Build.tasks
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

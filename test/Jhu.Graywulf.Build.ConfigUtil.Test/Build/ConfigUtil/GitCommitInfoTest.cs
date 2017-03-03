@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jhu.Graywulf.Build.ConfigUtil
+namespace Jhu.Graywulf.Build.Config
 {
     [TestClass]
     public class GitCommitInfoTest : TestBase

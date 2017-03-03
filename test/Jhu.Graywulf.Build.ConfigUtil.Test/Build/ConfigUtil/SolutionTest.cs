@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Jhu.Graywulf.Build.ConfigUtil
+namespace Jhu.Graywulf.Build.Config
 {
     [TestClass]
     public class SolutionTest : TestBase

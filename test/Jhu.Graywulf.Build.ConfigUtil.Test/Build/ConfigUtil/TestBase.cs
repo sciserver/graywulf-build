@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Jhu.Graywulf.Build.ConfigUtil
+namespace Jhu.Graywulf.Build.Config
 {
     public abstract class TestBase
     {

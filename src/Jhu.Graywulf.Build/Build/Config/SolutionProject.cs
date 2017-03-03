@@ -25,6 +25,7 @@ namespace Jhu.Graywulf.Build.Config
         public string Path
         {
             get { return path; }
+            set { path = value; }
         }
 
         [XmlAttribute("name")]
@@ -152,8 +153,16 @@ namespace Jhu.Graywulf.Build.Config
             this.assemblyName = xml.SelectSingleNode("//msb:AssemblyName", ns).InnerText;
 
             // Project type
-            var projectType = xml.SelectSingleNode("//msb:OutputType", ns).InnerText.ToLowerInvariant();
-            switch (projectType)
+            var projectType = xml.SelectSingleNode("//msb:OutputType", ns).InnerText;
+            // Is it a web application or unit test?
+            var ptypes = xml.SelectSingleNode("//msb:ProjectTypeGuids", ns);
+
+            SetProjectType(projectType, ptypes == null ? null : ptypes.InnerText);
+        }
+
+        public void SetProjectType(string outputType, string projectTypeGuids)
+        {
+            switch (outputType.ToLowerInvariant())
             {
                 case "exe":
                 case "winexe":
@@ -163,14 +172,12 @@ namespace Jhu.Graywulf.Build.Config
                     this.type = ProjectType.ClassLibrary;
                     break;
                 default:
-                    throw Error.UnknownProjectType(projectType);
+                    throw Error.UnknownProjectType(outputType);
             }
 
-            // Is it a web application or unit test?
-            var ptypes = xml.SelectSingleNode("//msb:ProjectTypeGuids", ns);
-            if (ptypes != null && !String.IsNullOrWhiteSpace(ptypes.InnerText))
+            if (!String.IsNullOrWhiteSpace(projectTypeGuids))
             {
-                var parts = ptypes.InnerText.Split(',', ';');
+                var parts = projectTypeGuids.Split(',', ';');
 
                 for (int i = 0; i < parts.Length; i++)
                 {

@@ -6,6 +6,9 @@ using Microsoft.Build.Framework;
 
 namespace Jhu.Graywulf.Build.Tasks
 {
+    /// <summary>
+    /// MSBuild task to execute PowerShell scripts
+    /// </summary>
     public class InvokePS : Task
     {
         private string solutionDir;
