@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.IO;
 
-namespace Jhu.Graywulf.SqlClrUtil
+namespace Jhu.Graywulf.Build.SqlClr
 {
     class SqlClrReflector : IDisposable
     {

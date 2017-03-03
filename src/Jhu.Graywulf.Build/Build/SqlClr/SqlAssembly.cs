@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
 
-namespace Jhu.Graywulf.SqlClrUtil
+namespace Jhu.Graywulf.Build.SqlClr
 {
     public class SqlAssembly
     {

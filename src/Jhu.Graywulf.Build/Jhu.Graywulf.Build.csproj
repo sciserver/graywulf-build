@@ -78,7 +78,17 @@
     <Compile Include="Build\Config\Settings.cs" />
     <Compile Include="Build\Config\Solution.cs" />
     <Compile Include="Build\Config\SolutionProject.cs" />
+    <Compile Include="Build\SqlClr\Constants.cs" />
+    <Compile Include="Build\SqlClr\Enum.cs" />
+    <Compile Include="Build\SqlClr\Parameter.cs" />
+    <Compile Include="Build\SqlClr\SqlAggregate.cs" />
+    <Compile Include="Build\SqlClr\SqlAssembly.cs" />
+    <Compile Include="Build\SqlClr\SqlClrReflector.cs" />
+    <Compile Include="Build\SqlClr\SqlFunction.cs" />
+    <Compile Include="Build\SqlClr\SqlObject.cs" />
+    <Compile Include="Build\SqlClr\SqlUserDefinedType.cs" />
     <Compile Include="Build\Tasks\Configure.cs" />
+    <Compile Include="Build\Tasks\GenerateSql.cs" />
     <Compile Include="Build\Tasks\InvokePS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

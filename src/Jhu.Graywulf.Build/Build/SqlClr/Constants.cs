@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlTypes;
 
-namespace Jhu.Graywulf.SqlClrUtil
+namespace Jhu.Graywulf.Build.SqlClr
 {
     static class Constants
     {

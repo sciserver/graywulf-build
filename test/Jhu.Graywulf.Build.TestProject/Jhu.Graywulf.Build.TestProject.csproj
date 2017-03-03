@@ -93,4 +93,5 @@
     </PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)build\Jhu.Graywulf.Build.targets" />
+  <Import Project="$(SolutionDir)build\Jhu.Graywulf.Build.SqlClr.targets" />
 </Project>

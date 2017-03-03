@@ -7,7 +7,7 @@ using System.Reflection;
 using System.IO;
 using Microsoft.SqlServer.Server;
 
-namespace Jhu.Graywulf.SqlClrUtil
+namespace Jhu.Graywulf.Build.SqlClr
 {
     abstract class SqlObject : IComparable
     {

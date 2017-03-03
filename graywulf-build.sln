@@ -26,6 +26,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.SqlClrUtil", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Imports", "Imports", "{EACF5D86-6ACF-400D-B5C4-E368D3648284}"
 	ProjectSection(SolutionItems) = preProject
+		build\Jhu.Graywulf.Build.SqlClr.targets = build\Jhu.Graywulf.Build.SqlClr.targets
 		build\Jhu.Graywulf.Build.targets = build\Jhu.Graywulf.Build.targets
 		build\Jhu.Graywulf.Build.tasks = build\Jhu.Graywulf.Build.tasks
 	EndProjectSection
