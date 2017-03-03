@@ -67,6 +67,10 @@ namespace Jhu.Graywulf.Build.Tasks
 
         public override bool Execute()
         {
+            bool res;
+            var start = DateTime.Now;
+            Log.LogMessage(MessageImportance.Low, "Starting Graywulf configuration task.");
+
             var settings = new Config.Settings()
             {
                 SkipMissingBaseConfig = true,
@@ -90,13 +94,18 @@ namespace Jhu.Graywulf.Build.Tasks
                 project.FindConfigs();
                 project.MergeConfigs(settings);
                 project.GenerateAssemblyInfoFile();
+
+                res = true;
             }
             catch (Exception ex)
             {
                 Log.LogError(ex.Message);
+                res = false;
             }
 
-            return true;
+            Log.LogMessage(MessageImportance.Low, "Finished Graywulf configuration task.");
+
+            return res;
         }
     }
 }

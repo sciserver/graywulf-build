@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Jhu.Graywulf</RootNamespace>
-    <AssemblyName>Jhu.Graywulf.Build.ConfigUtil.Test</AssemblyName>
+    <AssemblyName>Jhu.Graywulf.Build.TestProject</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -56,12 +56,6 @@
   <ItemGroup>
     <Compile Include="Dummy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Jhu.Graywulf.Build\Jhu.Graywulf.Build.csproj">
-      <Project>{8c76a628-c4cd-4641-bd91-2cb7a1137a02}</Project>
-      <Name>Jhu.Graywulf.Build.ConfigUtil</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -74,7 +74,8 @@ namespace Jhu.Graywulf.Build.Tasks
 
         public override bool Execute()
         {
-            Log.LogMessage(MessageImportance.High, "START: {0}", DateTime.Now);
+            var start = DateTime.Now;
+            Log.LogMessage(MessageImportance.Low, "Starting power shell script: {0}.", script);
 
             var iss = InitialSessionState.CreateDefault();
             iss.Variables.Add(new SessionStateVariableEntry("SolutionDir", solutionDir, null));
@@ -109,7 +110,7 @@ namespace Jhu.Graywulf.Build.Tasks
                         Log.LogMessage(MessageImportance.Low, "{1}", e.ToString());
                     }
 
-                    Log.LogMessage(MessageImportance.High, "END: {0}", DateTime.Now);
+                    Log.LogMessage(MessageImportance.Low, "Finished power shell script: {0} in {1} seconds.", script, (DateTime.Now - start).TotalSeconds);
 
                     return !ps.HadErrors;
                 }
