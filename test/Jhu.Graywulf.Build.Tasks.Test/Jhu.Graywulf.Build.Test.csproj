@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Jhu.Graywulf</RootNamespace>
-    <AssemblyName>Jhu.Graywulf.Build.Tasks.Test</AssemblyName>
+    <AssemblyName>Jhu.Graywulf.Build.Test</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -66,18 +66,22 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Build\Config\GitCommitInfoTest.cs" />
+    <Compile Include="Build\Config\SolutionProjectTest.cs" />
+    <Compile Include="Build\Config\SolutionTest.cs" />
+    <Compile Include="Build\Config\TestBase.cs" />
     <Compile Include="Build\Tasks\InvokePSTest.cs" />
     <Compile Include="Build\Tasks\TestBuildEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Jhu.Graywulf.Build.Tasks\Jhu.Graywulf.Build.csproj">
+    <None Include="test.ps1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Jhu.Graywulf.Build\Jhu.Graywulf.Build.csproj">
       <Project>{9eda43b0-aabd-48c4-87b9-ee3bdc0941c8}</Project>
       <Name>Jhu.Graywulf.Build</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="test.ps1" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
