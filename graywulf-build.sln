@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{093CBAE0-0
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.ConfigUtil", "src\Jhu.Graywulf.Build.ConfigUtil\Jhu.Graywulf.Build.ConfigUtil.csproj", "{8C76A628-C4CD-4641-BD91-2CB7A1137A02}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.ConfigUtil.Test", "test\Jhu.Graywulf.Build.ConfigUtil.Test\Jhu.Graywulf.Build.ConfigUtil.Test.csproj", "{47D56E75-0426-4FC9-8427-8EBDB1D41FE4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.TestProject", "test\Jhu.Graywulf.Build.TestProject\Jhu.Graywulf.Build.TestProject.csproj", "{47D56E75-0426-4FC9-8427-8EBDB1D41FE4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{0754B2A4-4B6E-40C4-B439-CF14ACE5DA69}"
 	ProjectSection(SolutionItems) = preProject
@@ -22,7 +22,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Config", "Config", "{0754B2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build", "src\Jhu.Graywulf.Build\Jhu.Graywulf.Build.csproj", "{9EDA43B0-AABD-48C4-87B9-EE3BDC0941C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.Test", "test\Jhu.Graywulf.Build.Tasks.Test\Jhu.Graywulf.Build.Test.csproj", "{9B3284C2-66A0-43F6-9FB9-0418459EF48E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.Test", "test\Jhu.Graywulf.Build.Test\Jhu.Graywulf.Build.Test.csproj", "{9B3284C2-66A0-43F6-9FB9-0418459EF48E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.SqlClrUtil", "src\Jhu.Graywulf.SqlClrUtil\Jhu.Graywulf.SqlClrUtil.csproj", "{CC75D904-89FB-40CD-9EA3-55359FFE1540}"
 EndProject

@@ -5,6 +5,8 @@ namespace Jhu.Graywulf.Build.Config
 {
     public abstract class TestBase
     {
+        public const string TestProjectName = "Jhu.Graywulf.Build.TestProject";
+
         private static string GetSolutionPath()
         {
             var sln = Path.GetDirectoryName(Environment.GetEnvironmentVariable("SolutionPath"));
@@ -42,7 +44,7 @@ namespace Jhu.Graywulf.Build.Config
 
         protected string GetTestProjectPath()
         {
-            return MapPath(@"test\Jhu.Graywulf.Build.ConfigUtil.Test\Jhu.Graywulf.Build.ConfigUtil.Test.csproj");
+            return MapPath(String.Format(@"test\{0}\{0}.csproj", TestProjectName));
         }
     }
 }

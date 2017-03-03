@@ -12,7 +12,7 @@ namespace Jhu.Graywulf.Build.Config
         {
             var s = new Solution();
             s.LoadSolution(GetTestSolutionPath());
-            var p = s.Projects["Jhu.Graywulf.Build.ConfigUtil.Test"];
+            var p = s.Projects[TestProjectName];
             var gitinfo = p.GetGitCommitInfo("graywulf");
 
             Assert.IsNotNull(gitinfo.Hash);   
