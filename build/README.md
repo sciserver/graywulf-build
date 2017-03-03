@@ -1,0 +1,1 @@
+Copy contents of this directory under target solution and check in into source control, including binaries.
