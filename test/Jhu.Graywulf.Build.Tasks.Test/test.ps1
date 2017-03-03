@@ -1,0 +1,6 @@
+﻿echo "$SolutionDir"
+echo "$SolutionName"
+echo "$ProjectDir"
+echo "$ProjectName"
+echo "$OutDir"
+echo "$TargetName"
