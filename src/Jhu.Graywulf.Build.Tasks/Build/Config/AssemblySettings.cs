@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Jhu.Graywulf.Build.ConfigUtil
+namespace Jhu.Graywulf.Build.Config
 {
     [XmlRoot("assembly")]
     public class AssemblySettings

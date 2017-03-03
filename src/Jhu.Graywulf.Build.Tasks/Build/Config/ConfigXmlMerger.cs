@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 
-namespace Jhu.Graywulf.Build.ConfigUtil
+namespace Jhu.Graywulf.Build.Config
 {
     /// <summary>
     /// Implements function to merge two config files.

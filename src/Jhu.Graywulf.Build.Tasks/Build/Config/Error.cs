@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 
-namespace Jhu.Graywulf.Build.ConfigUtil
+namespace Jhu.Graywulf.Build.Config
 {
     public static class Error
     {

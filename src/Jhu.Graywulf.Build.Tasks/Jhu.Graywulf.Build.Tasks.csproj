@@ -50,11 +50,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Build\Config\AssemblySettings.cs" />
+    <Compile Include="Build\Config\Config.cs" />
+    <Compile Include="Build\Config\ConfigException.cs" />
+    <Compile Include="Build\Config\ConfigXmlMerger.cs" />
+    <Compile Include="Build\Config\Constants.cs" />
+    <Compile Include="Build\Config\Error.cs" />
+    <Compile Include="Build\Config\ErrorMessages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Build\Config\GitCommitInfo.cs" />
+    <Compile Include="Build\Config\Include.cs" />
+    <Compile Include="Build\Config\ProjectType.cs" />
+    <Compile Include="Build\Config\Settings.cs" />
+    <Compile Include="Build\Config\Solution.cs" />
+    <Compile Include="Build\Config\SolutionProject.cs" />
     <Compile Include="Build\Tasks\InvokePS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Build\Config\ErrorMessages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

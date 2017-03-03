@@ -101,6 +101,11 @@ namespace Jhu.Graywulf.Build.Tasks
                         Log.LogError("{0}", e.ToString());
                     }
 
+                    foreach (var e in ps.Streams.Verbose)
+                    {
+                        Log.LogMessage(MessageImportance.Low, "{1}", e.ToString());
+                    }
+
                     Log.LogMessage(MessageImportance.High, "END: {0}", DateTime.Now);
 
                     return !ps.HadErrors;
