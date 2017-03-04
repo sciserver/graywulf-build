@@ -1,6 +1,6 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Target Name="BeforeBuild">
-    <Configure Condition="Exists('$(ProjectDir)\base.config')" 
+    <Configure
       SolutionDir="$(SolutionDir)"
       SolutionName="$(SolutionName)"
       ProjectDir="$(ProjectDir)"

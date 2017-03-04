@@ -39,7 +39,7 @@ namespace Jhu.Graywulf.Build.Tasks
         {
             get
             {
-                throw new NotImplementedException();
+                return "Test project";
             }
         }
 

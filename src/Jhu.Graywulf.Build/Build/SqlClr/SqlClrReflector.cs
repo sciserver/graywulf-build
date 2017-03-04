@@ -8,8 +8,9 @@ using System.IO;
 
 namespace Jhu.Graywulf.Build.SqlClr
 {
-    class SqlClrReflector : IDisposable
+    class SqlClrReflector : MarshalByRefObject, IDisposable
     {
+        private string assemblyPath;
         private SqlAssembly assembly;
         private List<SqlObject> objects;
         private Dictionary<Type, string> types;
@@ -22,6 +23,17 @@ namespace Jhu.Graywulf.Build.SqlClr
         public Dictionary<Type, string> Types
         {
             get { return types; }
+        }
+
+        public SqlClrReflector()
+        {
+            InitializeMembers();
+        }
+
+        public SqlClrReflector(string assemblyPath, AssemblySecurityLevel sec)
+        {
+            InitializeMembers();
+            ReflectAssembly(assemblyPath, sec);
         }
 
         public SqlClrReflector(Assembly assembly, AssemblySecurityLevel sec)
@@ -40,7 +52,12 @@ namespace Jhu.Graywulf.Build.SqlClr
         {
         }
 
-        private void ReflectAssembly(Assembly a, AssemblySecurityLevel sec)
+        public void ReflectAssembly(string assemblyPath, AssemblySecurityLevel sec)
+        {
+            ReflectAssembly(Assembly.LoadFrom(assemblyPath), sec);
+        }
+
+        public void ReflectAssembly(Assembly a, AssemblySecurityLevel sec)
         {
             assembly = new SqlAssembly(a, sec);
 
@@ -71,6 +88,14 @@ namespace Jhu.Graywulf.Build.SqlClr
             }
         }
 
+        public void ScriptCreate(string path)
+        {
+            using (var outfile = new StreamWriter(path))
+            {
+                ScriptCreate(outfile);
+            }
+        }
+
         public void ScriptCreate(TextWriter writer)
         {
             foreach (var schema in CollectSchemaNames())
@@ -88,6 +113,14 @@ namespace Jhu.Graywulf.Build.SqlClr
             foreach (var obj in objects.OrderBy(i => i.Rank))
             {
                 obj.ScriptCreate(this, writer);
+            }
+        }
+
+        public void ScriptDrop(string path)
+        {
+            using (var outfile = new StreamWriter(path))
+            {
+                ScriptDrop(outfile);
             }
         }
 

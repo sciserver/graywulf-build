@@ -74,47 +74,59 @@ namespace Jhu.Graywulf.Build.Tasks
 
         public override bool Execute()
         {
+            bool res = true;
             var start = DateTime.Now;
-            Log.LogMessage(MessageImportance.Low, "Starting power shell script: {0}.", script);
+            Log.LogMessage(MessageImportance.Low, "Starting PowerShell script: {0}.", script);
 
-            var iss = InitialSessionState.CreateDefault();
-            iss.Variables.Add(new SessionStateVariableEntry("SolutionDir", solutionDir, null));
-            iss.Variables.Add(new SessionStateVariableEntry("SolutionName", solutionName, null));
-            iss.Variables.Add(new SessionStateVariableEntry("ProjectDir", projectDir, null));
-            iss.Variables.Add(new SessionStateVariableEntry("ProjectName",  projectName, null));
-            iss.Variables.Add(new SessionStateVariableEntry("OutDir",  outDir, null));
-            iss.Variables.Add(new SessionStateVariableEntry("TargetName",  targetName, null));
+            var src = System.IO.File.ReadAllText(script);
 
-            using (var rs = RunspaceFactory.CreateRunspace(iss))
+            if (!String.IsNullOrWhiteSpace(src))
             {
-                rs.Open();
+                var iss = InitialSessionState.CreateDefault();
+                iss.Variables.Add(new SessionStateVariableEntry("SolutionDir", solutionDir, null));
+                iss.Variables.Add(new SessionStateVariableEntry("SolutionName", solutionName, null));
+                iss.Variables.Add(new SessionStateVariableEntry("ProjectDir", projectDir, null));
+                iss.Variables.Add(new SessionStateVariableEntry("ProjectName", projectName, null));
+                iss.Variables.Add(new SessionStateVariableEntry("OutDir", outDir, null));
+                iss.Variables.Add(new SessionStateVariableEntry("TargetName", targetName, null));
 
-                using (var ps = PowerShell.Create())
+                using (var rs = RunspaceFactory.CreateRunspace(iss))
                 {
-                    ps.Runspace = rs;
+                    rs.Open();
 
-                    ps.AddScript(". " + script);
-
-                    foreach (var res in ps.Invoke())
+                    using (var ps = PowerShell.Create())
                     {
-                        Log.LogMessage(MessageImportance.High, "{0}", res.BaseObject);
+                        ps.Runspace = rs;
+
+                        ps.AddScript(src);
+
+                        foreach (var e in ps.Invoke())
+                        {
+                            Log.LogMessage(MessageImportance.High, "{0}", e.BaseObject);
+                        }
+
+                        foreach (var e in ps.Streams.Error)
+                        {
+                            Log.LogError("{0}", e.ToString());
+                        }
+
+                        foreach (var e in ps.Streams.Verbose)
+                        {
+                            Log.LogMessage(MessageImportance.Low, "{1}", e.ToString());
+                        }
+
+                        res = !ps.HadErrors;
                     }
-
-                    foreach (var e in ps.Streams.Error)
-                    {
-                        Log.LogError("{0}", e.ToString());
-                    }
-
-                    foreach (var e in ps.Streams.Verbose)
-                    {
-                        Log.LogMessage(MessageImportance.Low, "{1}", e.ToString());
-                    }
-
-                    Log.LogMessage(MessageImportance.Low, "Finished power shell script: {0} in {1} seconds.", script, (DateTime.Now - start).TotalSeconds);
-
-                    return !ps.HadErrors;
                 }
+
+                Log.LogMessage(MessageImportance.Low, "Finished PowerShell script: {0} in {1} seconds.", script, (DateTime.Now - start).TotalSeconds);
             }
+            else
+            {
+                Log.LogMessage(MessageImportance.Low, "Skipped empty PowerShell script: {0} in {1} seconds.", script, (DateTime.Now - start).TotalSeconds);
+            }
+
+            return res;
         }
     }
 }

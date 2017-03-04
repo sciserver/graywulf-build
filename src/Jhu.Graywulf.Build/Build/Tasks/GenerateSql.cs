@@ -80,37 +80,44 @@ namespace Jhu.Graywulf.Build.Tasks
                         throw new NotImplementedException();
                 }
 
-                var apath = Path.Combine(projectDir, outputPath, assemblyName) + extension;
-                var a = Assembly.LoadFrom(apath);
+                var assemblyPath = Path.Combine(projectDir, outputPath, assemblyName) + extension;
                 var sec = AssemblySecurityLevel.Safe;
+                var dir = Path.GetDirectoryName(assemblyPath);
+                var name = Path.GetFileNameWithoutExtension(assemblyPath);
+                var path = Path.Combine(dir, name);
+                var crpath = path + ".Create.sql";
+                var drpath = path + ".Drop.sql";
 
                 if (!String.IsNullOrWhiteSpace(securityLevel))
                 {
                     Enum.TryParse<AssemblySecurityLevel>(securityLevel, out sec);
                 }
 
-                var r = new SqlClrReflector(a, sec);
-                var dir = Path.GetDirectoryName(a.Location);
-                var name = Path.GetFileNameWithoutExtension(a.Location);
-                var path = Path.Combine(dir, name);
-                var crpath = path + ".Create.sql";
-                var drpath = path + ".Drop.sql";
+                // Load reflector into new app domain to prevent locking of dll
+                // by the MSBuild process
+                var buildpath = System.IO.Path.GetDirectoryName(this.GetType().Assembly.Location);
+                Log.LogMessage(MessageImportance.Low, "Running build in {0}", buildpath);
 
-                using (var outfile = new StreamWriter(crpath))
+                var adinfo = new AppDomainSetup()
                 {
-                    r.ScriptCreate(outfile);
-                }
+                    ApplicationBase = buildpath
+                };
+                var ad = AppDomain.CreateDomain("SqlClrReflector", null, adinfo);
+                var proxy = (SqlClrReflector)ad.CreateInstanceAndUnwrap(typeof(SqlClrReflector).Assembly.FullName, typeof(SqlClrReflector).FullName);
 
-                using (var outfile = new StreamWriter(drpath))
-                {
-                    r.ScriptDrop(outfile);
-                }
+                proxy.ReflectAssembly(assemblyPath, sec);
+                proxy.ScriptCreate(crpath);
+                proxy.ScriptDrop(drpath);
+                
+                proxy.Dispose();
+                AppDomain.Unload(ad);
 
                 res = true;
             }
             catch (Exception ex)
             {
                 Log.LogError(ex.Message);
+                Log.LogError(ex.StackTrace);
                 res = false;
             }
 

@@ -72,6 +72,7 @@
     <Compile Include="Build\Config\TestBase.cs" />
     <Compile Include="Build\Tasks\InvokePSTest.cs" />
     <Compile Include="Build\Tasks\TestBuildEngine.cs" />
+    <Compile Include="Build\Tasks\GenerateSqlTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
