@@ -85,6 +85,7 @@ namespace Jhu.Graywulf.Build.SqlClr
         {
             writer.Write(
 @"
+IF (SELECT COUNT(*) FROM sys.assemblies WHERE name = '{0}') = 0
 CREATE ASSEMBLY [{0}]
     AUTHORIZATION [dbo]
     FROM 0x",
@@ -116,6 +117,7 @@ CREATE ASSEMBLY [{0}]
         public void ScriptDrop(TextWriter writer)
         {
             writer.Write(@"
+IF (SELECT COUNT(*) FROM sys.assemblies WHERE name = '{0}') > 0
 DROP ASSEMBLY [{0}]
 
 GO

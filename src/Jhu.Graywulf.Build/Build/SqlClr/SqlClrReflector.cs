@@ -150,7 +150,8 @@ namespace Jhu.Graywulf.Build.SqlClr
             {
                 writer.Write(
 @"
-CREATE SCHEMA [{0}]
+IF SCHEMA_ID('{0}') IS NULL
+EXEC('CREATE SCHEMA [{0}]')
 
 GO
 
@@ -165,7 +166,8 @@ GO
             {
                 writer.Write(
 @"
-DROP SCHEMA [{0}]
+IF SCHEMA_ID('{0}') IS NOT NULL
+EXEC('DROP SCHEMA [{0}]')
 
 GO
 
