@@ -7,63 +7,36 @@ namespace Jhu.Graywulf.Build.Tasks
     /// <summary>
     /// MSBuild tasks to generate merge config files and generate AssemblyInfo.cs
     /// </summary>
-    public class Configure : Task
+    public class Configure : TaskBase
     {
-        private string solutionDir;
-        private string solutionName;
-        private string projectDir;
-        private string projectName;
-        private string assemblyName;
-        private string outputType;
+        #region Private member variables
+
         private string projectTypeGuids;
 
-        [Required]
-        public string SolutionDir
-        {
-            get { return solutionDir; }
-            set { solutionDir = value; }
-        }
+        #endregion
+        #region Properties
 
         [Required]
-        public string SolutionName
-        {
-            get { return solutionName; }
-            set { solutionName = value; }
-        }
-
-        [Required]
-        public string ProjectDir
-        {
-            get { return projectDir; }
-            set { projectDir = value; }
-        }
-
-        [Required]
-        public string ProjectName
-        {
-            get { return projectName; }
-            set { projectName = value; }
-        }
-
-        [Required]
-        public string AssemblyName
-        {
-            get { return assemblyName; }
-            set { assemblyName = value; }
-        }
-
-        [Required]
-        public string OutputType
-        {
-            get { return outputType; }
-            set { outputType = value; }
-        }
-
         public string ProjectTypeGuids
         {
             get { return projectTypeGuids; }
             set { projectTypeGuids = value; }
         }
+
+        #endregion
+        #region Constructors and initializers
+
+        public Configure()
+        {
+            InitializeMembers();
+        }
+
+        private void InitializeMembers()
+        {
+            this.projectTypeGuids = null;
+        }
+
+        #endregion
 
         public override bool Execute()
         {
@@ -78,19 +51,19 @@ namespace Jhu.Graywulf.Build.Tasks
 
             var solution = new Config.Solution()
             {
-                Path = System.IO.Path.Combine(solutionDir, solutionName),
+                Path = System.IO.Path.Combine(SolutionDir, SolutionName),
             };
 
             var project = new Config.SolutionProject(solution)
             {
-                Path = System.IO.Path.Combine(projectDir, projectName),
-                Name = System.IO.Path.GetFileNameWithoutExtension(projectName),
-                AssemblyName = assemblyName,
+                Path = System.IO.Path.Combine(ProjectDir, ProjectName),
+                Name = System.IO.Path.GetFileNameWithoutExtension(ProjectName),
+                AssemblyName = TargetName,
             };
 
             try
             {
-                project.SetProjectType(outputType, projectTypeGuids);
+                project.SetProjectType(OutputType, projectTypeGuids);
                 project.FindConfigs();
                 project.MergeConfigs(settings);
                 project.GenerateAssemblyInfoFile();

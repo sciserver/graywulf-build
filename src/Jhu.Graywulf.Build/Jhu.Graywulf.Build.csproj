@@ -90,6 +90,7 @@
     <Compile Include="Build\Tasks\Configure.cs" />
     <Compile Include="Build\Tasks\GenerateSql.cs" />
     <Compile Include="Build\Tasks\InvokePS.cs" />
+    <Compile Include="Build\Tasks\TaskBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

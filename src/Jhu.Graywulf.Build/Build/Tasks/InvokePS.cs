@@ -9,57 +9,14 @@ namespace Jhu.Graywulf.Build.Tasks
     /// <summary>
     /// MSBuild task to execute PowerShell scripts
     /// </summary>
-    public class InvokePS : Task
+    public class InvokePS : TaskBase
     {
-        private string solutionDir;
-        private string solutionName;
-        private string projectDir;
-        private string projectName;
-        private string outDir;
-        private string targetName;
+        #region Private member variables
+
         private string script;
 
-        [Required]
-        public string SolutionDir
-        {
-            get { return solutionDir; }
-            set { solutionDir = value; }
-        }
-
-        [Required]
-        public string SolutionName
-        {
-            get { return solutionName; }
-            set { solutionName = value; }
-        }
-
-        [Required]
-        public string ProjectDir
-        {
-            get { return projectDir; }
-            set { projectDir = value; }
-        }
-
-        [Required]
-        public string ProjectName
-        {
-            get { return projectName; }
-            set { projectName = value; }
-        }
-
-        [Required]
-        public string OutDir
-        {
-            get { return outDir; }
-            set { outDir = value; }
-        }
-
-        [Required]
-        public string TargetName
-        {
-            get { return targetName; }
-            set { targetName = value; }
-        }
+        #endregion
+        #region Properties
 
         [Required]
         public string Script
@@ -68,9 +25,20 @@ namespace Jhu.Graywulf.Build.Tasks
             set { script = value; }
         }
 
+        #endregion
+        #region Constructors and initializers
+
         public InvokePS()
         {
+            InitializeMembers();
         }
+
+        private void InitializeMembers()
+        {
+            this.script = null;
+        }
+
+        #endregion
 
         public override bool Execute()
         {
@@ -83,13 +51,14 @@ namespace Jhu.Graywulf.Build.Tasks
             if (!String.IsNullOrWhiteSpace(src))
             {
                 var iss = InitialSessionState.CreateDefault();
-                iss.Variables.Add(new SessionStateVariableEntry("SolutionDir", solutionDir, null));
-                iss.Variables.Add(new SessionStateVariableEntry("SolutionName", solutionName, null));
-                iss.Variables.Add(new SessionStateVariableEntry("ProjectDir", projectDir, null));
-                iss.Variables.Add(new SessionStateVariableEntry("ProjectName", projectName, null));
-                iss.Variables.Add(new SessionStateVariableEntry("OutDir", outDir, null));
-                iss.Variables.Add(new SessionStateVariableEntry("TargetName", targetName, null));
-
+                iss.Variables.Add(new SessionStateVariableEntry("SolutionDir", SolutionDir, null));
+                iss.Variables.Add(new SessionStateVariableEntry("SolutionName", SolutionName, null));
+                iss.Variables.Add(new SessionStateVariableEntry("ConfigurationName", ConfigurationName, null));
+                iss.Variables.Add(new SessionStateVariableEntry("ProjectDir", ProjectDir, null));
+                iss.Variables.Add(new SessionStateVariableEntry("ProjectName", ProjectName, null));
+                iss.Variables.Add(new SessionStateVariableEntry("TargetName", TargetName, null));
+                iss.Variables.Add(new SessionStateVariableEntry("OutDir", OutDir, null));
+                
                 using (var rs = RunspaceFactory.CreateRunspace(iss))
                 {
                     rs.Open();

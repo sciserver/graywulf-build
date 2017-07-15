@@ -15,9 +15,9 @@ namespace Jhu.Graywulf.Build.Tasks
                 BuildEngine = new TestBuildEngine(),
                 ProjectDir = Path.GetFullPath(@"..\..\..\Jhu.Graywulf.Build.TestProject\"),
                 ProjectName = "Jhu.Graywulf.Build.TestProject",
-                AssemblyName = "Jhu.Graywulf.Build.TestProject",
+                TargetName = "Jhu.Graywulf.Build.TestProject",
                 OutputType = "Library",
-                OutputPath = @"bin\Debug\"
+                OutDir = @"bin\Debug\"
             };
 
             Assert.IsTrue(task.Execute());
