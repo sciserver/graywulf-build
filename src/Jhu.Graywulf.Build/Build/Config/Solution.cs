@@ -77,7 +77,7 @@ namespace Jhu.Graywulf.Build.Config
         {
             foreach (var project in projects.Values)
             {
-                project.MergeConfigs(settings);
+                project.MergeConfigs(null, settings);
             }
         }
 

@@ -79,6 +79,15 @@ namespace Jhu.Graywulf.Build.Config {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include file &apos;{2}&apos; referenced in &apos;{1}&apos; not found for project &apos;{0}&apos;..
+        /// </summary>
+        internal static string MissingInclude {
+            get {
+                return ResourceManager.GetString("MissingInclude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown project type &apos;{0}&apos;..
         /// </summary>
         internal static string UnknownProjectType {

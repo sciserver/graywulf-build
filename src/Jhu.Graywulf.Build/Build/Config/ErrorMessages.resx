@@ -123,6 +123,9 @@
   <data name="MissingBaseConfig" xml:space="preserve">
     <value>Base config file not found for project '{0}'.</value>
   </data>
+  <data name="MissingInclude" xml:space="preserve">
+    <value>Include file '{2}' referenced in '{1}' not found for project '{0}'.</value>
+  </data>
   <data name="UnknownProjectType" xml:space="preserve">
     <value>Unknown project type '{0}'.</value>
   </data>

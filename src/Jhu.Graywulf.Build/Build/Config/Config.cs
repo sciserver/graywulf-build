@@ -54,7 +54,7 @@ namespace Jhu.Graywulf.Build.Config
             this.assemblySettings = null;
         }
 
-        public static Config LoadConfigFile(string path)
+        public static Config LoadBuildFile(string path)
         {
             using (var infile = System.IO.File.Open(path, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.ReadWrite))
             {

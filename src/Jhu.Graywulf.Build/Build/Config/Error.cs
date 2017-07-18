@@ -11,6 +11,12 @@ namespace Jhu.Graywulf.Build.Config
             return new ConfigException(msg);
         }
 
+        public static ConfigException MissingInclude(SolutionProject project, string configpath, string includepath)
+        {
+            var msg = String.Format(ErrorMessages.MissingInclude, project, configpath, includepath);
+            return new ConfigException(msg);
+        }
+
         public static ConfigException IncompatibleRootNodes(XmlElement node1, XmlElement node2)
         {
             var msg = String.Format(ErrorMessages.IncompatibleRootNodes, node1.Name, node2.Name);

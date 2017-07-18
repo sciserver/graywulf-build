@@ -16,7 +16,6 @@ namespace Jhu.Graywulf.Build.Tasks
         #endregion
         #region Properties
 
-        [Required]
         public string ProjectTypeGuids
         {
             get { return projectTypeGuids; }
@@ -64,19 +63,21 @@ namespace Jhu.Graywulf.Build.Tasks
             try
             {
                 project.SetProjectType(OutputType, projectTypeGuids);
-                project.FindConfigs();
-                project.MergeConfigs(settings);
+                project.FindConfigs(this);
+                project.MergeConfigs(this, settings);
                 project.GenerateAssemblyInfoFile();
 
                 res = true;
+
+                Log.LogMessage(MessageImportance.Low, "Finished Graywulf configuration task.");
             }
             catch (Exception ex)
             {
                 Log.LogError(ex.Message);
                 res = false;
-            }
 
-            Log.LogMessage(MessageImportance.Low, "Finished Graywulf configuration task.");
+                Log.LogMessage(MessageImportance.High, "Graywulf configuration task failed.");
+            }
 
             return res;
         }

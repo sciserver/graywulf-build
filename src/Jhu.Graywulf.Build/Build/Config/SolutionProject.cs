@@ -3,6 +3,8 @@ using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
 namespace Jhu.Graywulf.Build.Config
 {
@@ -137,7 +139,7 @@ namespace Jhu.Graywulf.Build.Config
             this.path = path;
 
             LoadProjectFile();
-            FindConfigs();
+            FindConfigs(null);
         }
 
         private void LoadProjectFile()
@@ -251,7 +253,7 @@ namespace Jhu.Graywulf.Build.Config
             return settings;
         }
 
-        public void UpdateAssemblyInfoFileVersion()
+        public void UpdateAssemblyInfoFileVersion(Task task)
         {
             if (configs.Count == 0)
             {
@@ -260,20 +262,22 @@ namespace Jhu.Graywulf.Build.Config
 
             var settings = GetAssemblySettings();
 
-            Console.WriteLine("Updating project version number to '{0}'.", settings.Version);
+            LogMessage(task, MessageImportance.Low, "Updating project version number to '{0}'.", settings.Version);
 
             var path = GetAssemblyInfoFile();
             settings.UpdateAssemblyInfoFileVersion(path);
         }
-      
+
 
         /// <summary>
         /// Ascend in the file hierarcy from the project dir to the
         /// solution dir and collect config files that apply to the current
         /// project
         /// </summary>
-        public void FindConfigs()
+        public void FindConfigs(Task task)
         {
+            LogMessage(task, MessageImportance.Low, "Searching for build.config files while traversing up to the solution directory...");
+
             var dir = System.IO.Path.GetDirectoryName(GetProjectAbsolutePath());
             var slndir = System.IO.Path.GetFullPath(System.IO.Path.GetDirectoryName(solution.Path)).TrimEnd(System.IO.Path.DirectorySeparatorChar);
 
@@ -282,12 +286,14 @@ namespace Jhu.Graywulf.Build.Config
             while (true)
             {
                 dir = System.IO.Path.GetFullPath(dir).TrimEnd(System.IO.Path.DirectorySeparatorChar);
-                var file = System.IO.Path.Combine(dir, Constants.GraywulfConfig);
+                var buildfile = System.IO.Path.Combine(dir, Constants.GraywulfConfig);
 
-                if (System.IO.File.Exists(file))
+                if (System.IO.File.Exists(buildfile))
                 {
-                    var config = Config.LoadConfigFile(file);
+                    var config = Config.LoadBuildFile(buildfile);
                     configs.Add(config);
+
+                    LogMessage(task, MessageImportance.Low, "    {0} containing {1} include(s).", config.Path, config.Includes.Count);
                 }
 
                 // If already in solution dir, exit
@@ -303,9 +309,11 @@ namespace Jhu.Graywulf.Build.Config
 
             // Reverse, so that configs will be applied top-down
             configs.Reverse();
+
+            LogMessage(task, MessageImportance.Low, "Found {0} build.config.", configs.Count);
         }
 
-        public void MergeConfigs(Settings settings)
+        public void MergeConfigs(Task task, Settings settings)
         {
             // Load base config file
             var path = GetBaseConfigFile();
@@ -332,24 +340,33 @@ namespace Jhu.Graywulf.Build.Config
 
             string root = null;
 
-            foreach(var config in configs)
+            foreach (var config in configs)
             {
                 root = GetRootPath(root, config);
 
                 // Update assembly info with version number
 
                 // Merge in all includes, if any
-                Console.WriteLine("Including files from config file '{0}'.", config.Path);
+                LogMessage(task, MessageImportance.Low, "Including files from config file '{0}'.", config.Path);
 
                 if (config.Includes != null)
                 {
                     foreach (var include in config.Includes)
                     {
                         var incpath = GetIncludePath(root, include);
-                        var incxml = include.LoadIncludeFile(incpath);
-                        ConfigXmlMerger.Merge(basexml, incxml);
 
-                        Console.WriteLine("Merged configuration from '{0}'.", incpath);
+                        if (File.Exists(incpath))
+                        {
+                            var incxml = include.LoadIncludeFile(incpath);
+                            ConfigXmlMerger.Merge(basexml, incxml);
+
+                            LogMessage(task, MessageImportance.Low, "Merged configuration from '{0}'.", incpath);
+                        }
+                        else
+                        {
+                            LogMessage(task, MessageImportance.High, "Missing config file '{0}'.", incpath);
+                            throw Error.MissingInclude(this, config.Path, incpath);
+                        }
                     }
                 }
             }
@@ -386,6 +403,18 @@ namespace Jhu.Graywulf.Build.Config
 
             path = System.IO.Path.GetFullPath(path);
             return path;
+        }
+
+        private void LogMessage(Task task, MessageImportance importance, string message, params object[] args)
+        {
+            if (task == null)
+            {
+                Console.WriteLine(message, args);
+            }
+            else
+            {
+                task.Log.LogMessage(importance, message, args);
+            }
         }
 
         public override string ToString()
