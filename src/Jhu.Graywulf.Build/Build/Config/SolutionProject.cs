@@ -8,7 +8,7 @@ using Microsoft.Build.Utilities;
 
 namespace Jhu.Graywulf.Build.Config
 {
-    public class SolutionProject
+    public class SolutionProject : ConfigObjectBase
     {
         private Solution solution;
         private string path;
@@ -290,7 +290,7 @@ namespace Jhu.Graywulf.Build.Config
 
                 if (System.IO.File.Exists(buildfile))
                 {
-                    var config = Config.LoadBuildFile(buildfile);
+                    var config = Config.LoadFile(task, buildfile);
                     configs.Add(config);
 
                     LogMessage(task, MessageImportance.Low, "    {0} containing {1} include(s).", config.Path, config.Includes.Count);
@@ -403,18 +403,6 @@ namespace Jhu.Graywulf.Build.Config
 
             path = System.IO.Path.GetFullPath(path);
             return path;
-        }
-
-        private void LogMessage(Task task, MessageImportance importance, string message, params object[] args)
-        {
-            if (task == null)
-            {
-                Console.WriteLine(message, args);
-            }
-            else
-            {
-                task.Log.LogMessage(importance, message, args);
-            }
         }
 
         public override string ToString()

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:schemas-graywulf-config" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="config">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="assemblySettings" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="internals" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="visibleTo" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="prefix" type="xs:string" use="optional" />
+            <xs:attribute name="title" type="xs:string" use="optional" />
+            <xs:attribute name="description" type="xs:string" use="optional" />
+            <xs:attribute name="configuration" type="xs:string" use="optional" />
+            <xs:attribute name="company" type="xs:string" use="optional" />
+            <xs:attribute name="product" type="xs:string" use="optional" />
+            <xs:attribute name="copyright" type="xs:string" use="optional" />
+            <xs:attribute name="trademark" type="xs:string" use="optional" />
+            <xs:attribute name="culture" type="xs:string" use="optional" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="includes" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="include" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:attribute name="path" type="xs:string" use="optional" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="root" type="xs:string" use="optional" />      
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

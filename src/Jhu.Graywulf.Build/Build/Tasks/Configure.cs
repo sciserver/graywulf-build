@@ -74,6 +74,7 @@ namespace Jhu.Graywulf.Build.Tasks
             catch (Exception ex)
             {
                 Log.LogError(ex.Message);
+                Log.LogError(ex.StackTrace);
                 res = false;
 
                 Log.LogMessage(MessageImportance.High, "Graywulf configuration task failed.");

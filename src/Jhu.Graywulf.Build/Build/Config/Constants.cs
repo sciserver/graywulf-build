@@ -18,5 +18,7 @@ namespace Jhu.Graywulf.Build.Config
 
         public const string PropertiesFolder = "Properties";
         public const string AssemblyInfo = "AssemblyInfo.cs";
+
+        public const string XmlNamespace = "urn:schemas-graywulf-config";
     }
 }
