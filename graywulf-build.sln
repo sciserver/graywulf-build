@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{B69C4DAA-9A7C-4A2D-9654-51ABE8A9E1BA}"
 EndProject
@@ -21,8 +21,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build", "src\Jhu.Graywulf.Build\Jhu.Graywulf.Build.csproj", "{9EDA43B0-AABD-48C4-87B9-EE3BDC0941C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.Build.Test", "test\Jhu.Graywulf.Build.Test\Jhu.Graywulf.Build.Test.csproj", "{9B3284C2-66A0-43F6-9FB9-0418459EF48E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jhu.Graywulf.SqlClrUtil", "src\Jhu.Graywulf.SqlClrUtil\Jhu.Graywulf.SqlClrUtil.csproj", "{CC75D904-89FB-40CD-9EA3-55359FFE1540}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Imports", "Imports", "{EACF5D86-6ACF-400D-B5C4-E368D3648284}"
 	ProjectSection(SolutionItems) = preProject
@@ -48,10 +46,6 @@ Global
 		{9B3284C2-66A0-43F6-9FB9-0418459EF48E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B3284C2-66A0-43F6-9FB9-0418459EF48E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B3284C2-66A0-43F6-9FB9-0418459EF48E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC75D904-89FB-40CD-9EA3-55359FFE1540}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC75D904-89FB-40CD-9EA3-55359FFE1540}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC75D904-89FB-40CD-9EA3-55359FFE1540}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC75D904-89FB-40CD-9EA3-55359FFE1540}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +55,5 @@ Global
 		{0754B2A4-4B6E-40C4-B439-CF14ACE5DA69} = {093CBAE0-04B3-4394-9092-4D9CA1C133D7}
 		{9EDA43B0-AABD-48C4-87B9-EE3BDC0941C8} = {B69C4DAA-9A7C-4A2D-9654-51ABE8A9E1BA}
 		{9B3284C2-66A0-43F6-9FB9-0418459EF48E} = {093CBAE0-04B3-4394-9092-4D9CA1C133D7}
-		{CC75D904-89FB-40CD-9EA3-55359FFE1540} = {B69C4DAA-9A7C-4A2D-9654-51ABE8A9E1BA}
 	EndGlobalSection
 EndGlobal
