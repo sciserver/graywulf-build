@@ -15,7 +15,7 @@ namespace Jhu.Graywulf.Build.Tasks
         {
             get
             {
-                throw new NotImplementedException();
+                return -1;
             }
         }
 
@@ -23,7 +23,7 @@ namespace Jhu.Graywulf.Build.Tasks
         {
             get
             {
-                throw new NotImplementedException();
+                return false;
             }
         }
 
@@ -31,7 +31,7 @@ namespace Jhu.Graywulf.Build.Tasks
         {
             get
             {
-                throw new NotImplementedException();
+                return -1;
             }
         }
 
