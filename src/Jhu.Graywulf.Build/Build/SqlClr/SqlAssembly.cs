@@ -72,6 +72,37 @@ namespace Jhu.Graywulf.Build.SqlClr
             this.references = new Dictionary<string, SqlAssembly>(old.references);
         }
 
+        internal static Assembly ReflectionOnlyLoadAssembly(AssemblyName name)
+        {
+            var a = Assembly.ReflectionOnlyLoad(name.ToString());
+            ReflectionOnlyPreloadDependencies(a);
+            return a;
+        }
+
+        internal static Assembly ReflectionOnlyLoadAssembly(string path)
+        {
+            var a = Assembly.ReflectionOnlyLoadFrom(path);
+            ReflectionOnlyPreloadDependencies(a);
+            return a;
+        }
+
+        private static void ReflectionOnlyPreloadDependencies(Assembly assembly)
+        {
+            foreach (var assemblyName in assembly.GetReferencedAssemblies())
+            {
+                try
+                {
+                    Assembly.ReflectionOnlyLoad(assemblyName.FullName);
+                }
+                catch
+                {
+                    var path = System.IO.Path.GetDirectoryName(assembly.Location);
+                    path = System.IO.Path.Combine(path, assemblyName.Name + ".dll");
+                    Assembly.ReflectionOnlyLoadFrom(path);
+                }
+            }
+        }
+
         private void ReflectAssembly(Assembly assembly)
         {
             this.assembly = assembly;
@@ -173,7 +204,7 @@ GO
             // Attempt default location
             try
             {
-                a = Assembly.Load(name);
+                a = ReflectionOnlyLoadAssembly(name);
             }
             catch { }
 
@@ -182,7 +213,7 @@ GO
                 // Try from the directory of referencing
                 try
                 {
-                    a = Assembly.LoadFrom(System.IO.Path.Combine(dir, name.Name + ".dll"));
+                    a = ReflectionOnlyLoadAssembly(System.IO.Path.Combine(dir, name.Name + ".dll"));
                 }
                 catch { }
             }

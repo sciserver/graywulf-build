@@ -54,7 +54,8 @@ namespace Jhu.Graywulf.Build.SqlClr
 
         public void ReflectAssembly(string assemblyPath, AssemblySecurityLevel sec)
         {
-            ReflectAssembly(Assembly.LoadFrom(assemblyPath), sec);
+            var a = SqlAssembly.ReflectionOnlyLoadAssembly(assemblyPath);
+            ReflectAssembly(a, sec);
         }
 
         public void ReflectAssembly(Assembly a, AssemblySecurityLevel sec)

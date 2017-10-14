@@ -91,15 +91,15 @@ namespace Jhu.Graywulf.Build.SqlClr
         public static SqlObject FromType(Type type)
         {
             SqlObject obj = null;
-            var atts = type.GetCustomAttributes();
+            var atts = type.GetCustomAttributesData();
 
             foreach (var att in atts)
             {
-                if (att is SqlUserDefinedAggregateAttribute)
+                if (att.AttributeType == typeof(SqlUserDefinedAggregateAttribute))
                 {
                     obj = new SqlAggregate(type);
                 }
-                else if (att is SqlUserDefinedTypeAttribute)
+                else if (att.AttributeType == typeof(SqlUserDefinedTypeAttribute))
                 {
                     obj = new SqlUserDefinedType(type);
                 }
@@ -116,11 +116,11 @@ namespace Jhu.Graywulf.Build.SqlClr
         public static SqlObject FromMethod(MethodInfo method)
         {
             SqlObject obj = null;
-            var atts = method.GetCustomAttributes();
+            var atts = method.GetCustomAttributesData();
 
             foreach (var att in atts)
             {
-                if (att is SqlFunctionAttribute)
+                if (att.AttributeType == typeof(SqlFunctionAttribute))
                 {
                     obj = new SqlFunction(method);
                 }
