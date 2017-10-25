@@ -70,17 +70,17 @@ namespace Jhu.Graywulf.Build.SqlClr
         {
             base.ReflectAttributes(method);
 
-            var att = (SqlFunctionAttribute)method.GetCustomAttribute(typeof(SqlFunctionAttribute));
+            var att = SqlClrReflector.GetAttribute(method, typeof(SqlFunctionAttribute).FullName);
 
-            ReflectObjectName(att.Name);
+            ReflectObjectName((string)SqlClrReflector.GetAttributeArgument(att, "Name"));
             ReflectParameters(method);
 
-            if (method.ReturnType == typeof(System.Collections.IEnumerable))
+            /*if (method.ReturnType == typeof(System.Collections.IEnumerable))
             {
                 isTableValued = true;
                 tableDefinition = att.TableDefinition;
                 fillRowMethodName = att.FillRowMethodName;
-            }
+            }*/
         }
 
         public override void ScriptCreate(SqlClrReflector r, TextWriter writer)

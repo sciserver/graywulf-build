@@ -90,16 +90,21 @@ namespace Jhu.Graywulf.Build.SqlClr
         {
             foreach (var assemblyName in assembly.GetReferencedAssemblies())
             {
-                try
-                {
-                    Assembly.ReflectionOnlyLoad(assemblyName.FullName);
-                }
-                catch
-                {
-                    var path = System.IO.Path.GetDirectoryName(assembly.Location);
-                    path = System.IO.Path.Combine(path, assemblyName.Name + ".dll");
-                    Assembly.ReflectionOnlyLoadFrom(path);
-                }
+                ReflectionOnlyPreloadAssembly(assemblyName, assembly.Location);
+            }
+        }
+
+        internal static void ReflectionOnlyPreloadAssembly(AssemblyName assemblyName, string location)
+        {
+            try
+            {
+                Assembly.ReflectionOnlyLoad(assemblyName.FullName);
+            }
+            catch
+            {
+                var path = System.IO.Path.GetDirectoryName(location);
+                path = System.IO.Path.Combine(path, assemblyName.Name + ".dll");
+                Assembly.ReflectionOnlyLoadFrom(path);
             }
         }
 

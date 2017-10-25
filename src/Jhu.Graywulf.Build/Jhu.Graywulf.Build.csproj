@@ -104,12 +104,12 @@
     <Compile Include="Build\Config\SolutionProject.cs" />
     <Compile Include="Build\SqlClr\Constants.cs" />
     <Compile Include="Build\SqlClr\Enum.cs" />
-    <Compile Include="Build\SqlClr\Parameter.cs" />
     <Compile Include="Build\SqlClr\SqlAggregate.cs" />
     <Compile Include="Build\SqlClr\SqlAssembly.cs" />
     <Compile Include="Build\SqlClr\SqlClrReflector.cs" />
     <Compile Include="Build\SqlClr\SqlFunction.cs" />
     <Compile Include="Build\SqlClr\SqlObject.cs" />
+    <Compile Include="Build\SqlClr\SqlParameter.cs" />
     <Compile Include="Build\SqlClr\SqlUserDefinedType.cs" />
     <Compile Include="Build\Tasks\Configure.cs" />
     <Compile Include="Build\Tasks\GenerateSql.cs" />
@@ -139,7 +139,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>IF NOT EXIST $(SolutionDir)build mkdir $(SolutionDir)build
-copy $(TargetPath) $(SolutionDir)\build</PostBuildEvent>
+copy $(TargetPath) $(SolutionDir)build</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

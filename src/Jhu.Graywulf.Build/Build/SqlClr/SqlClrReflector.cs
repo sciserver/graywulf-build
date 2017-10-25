@@ -10,17 +10,22 @@ namespace Jhu.Graywulf.Build.SqlClr
 {
     class SqlClrReflector : MarshalByRefObject, IDisposable
     {
-        private string assemblyPath;
         private SqlAssembly assembly;
+        private HashSet<string> schemas;
         private List<SqlObject> objects;
-        private Dictionary<Type, string> types;
+        private Dictionary<string, string> types;
+
+        public HashSet<string> Schames
+        {
+            get { return schemas; }
+        }
 
         public List<SqlObject> Objects
         {
             get { return objects; }
         }
 
-        public Dictionary<Type, string> Types
+        public Dictionary<string, string> Types
         {
             get { return types; }
         }
@@ -28,39 +33,52 @@ namespace Jhu.Graywulf.Build.SqlClr
         public SqlClrReflector()
         {
             InitializeMembers();
+
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AppDomain_ReflectionOnlyAssemblyResolve;
+        }
+
+        private Assembly AppDomain_ReflectionOnlyAssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            var assemblyName = new AssemblyName(args.Name);
+            return SqlAssembly.ReflectionOnlyLoadAssembly(assemblyName);
         }
 
         public SqlClrReflector(string assemblyPath, AssemblySecurityLevel sec)
+            : this()
         {
-            InitializeMembers();
             ReflectAssembly(assemblyPath, sec);
         }
 
         public SqlClrReflector(Assembly assembly, AssemblySecurityLevel sec)
+            :this()
         {
-            InitializeMembers();
-            ReflectAssembly(assembly, sec);
+            CollectObjects(assembly, sec);
         }
 
         private void InitializeMembers()
         {
-            this.objects = new List<SqlObject>();
-            this.types = new Dictionary<Type, string>(Constants.SqlTypes);
+            this.objects = null;
+            this.schemas = null;
+            this.types = null;
         }
 
         public void Dispose()
         {
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= AppDomain_ReflectionOnlyAssemblyResolve;
         }
 
         public void ReflectAssembly(string assemblyPath, AssemblySecurityLevel sec)
         {
             var a = SqlAssembly.ReflectionOnlyLoadAssembly(assemblyPath);
-            ReflectAssembly(a, sec);
+            CollectObjects(a, sec);
+            CollectSchemaNames();
         }
 
-        public void ReflectAssembly(Assembly a, AssemblySecurityLevel sec)
+        private void CollectObjects(Assembly a, AssemblySecurityLevel sec)
         {
             assembly = new SqlAssembly(a, sec);
+            objects = new List<SqlClr.SqlObject>();
+            types = new Dictionary<string, string>(Constants.SqlTypes);
 
             foreach (var type in a.GetTypes())
             {
@@ -72,7 +90,7 @@ namespace Jhu.Graywulf.Build.SqlClr
 
                     if (obj is SqlUserDefinedType)
                     {
-                        types.Add(type, ((SqlUserDefinedType)obj).GetSql());
+                        types.Add(type.FullName, ((SqlUserDefinedType)obj).GetSql());
                     }
                 }
                 else
@@ -89,6 +107,23 @@ namespace Jhu.Graywulf.Build.SqlClr
             }
         }
 
+        private void CollectSchemaNames()
+        {
+            schemas = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+
+            foreach (var obj in objects)
+            {
+                var schema = obj.Schema;
+
+                if (!String.IsNullOrEmpty(schema) &&
+                    !Constants.SystemSchemas.Contains(schema) &&
+                    !schemas.Contains(obj.Schema))
+                {
+                    schemas.Add(obj.Schema);
+                }
+            }
+        }
+
         public void ScriptCreate(string path)
         {
             using (var outfile = new StreamWriter(path))
@@ -99,7 +134,7 @@ namespace Jhu.Graywulf.Build.SqlClr
 
         public void ScriptCreate(TextWriter writer)
         {
-            foreach (var schema in CollectSchemaNames())
+            foreach (var schema in schemas)
             {
                 ScriptCreateSchema(writer, schema);
             }
@@ -139,7 +174,7 @@ namespace Jhu.Graywulf.Build.SqlClr
                 a.ScriptDrop(writer);
             }   
 
-            foreach (var schema in CollectSchemaNames())
+            foreach (var schema in schemas)
             {
                 ScriptDropSchema(writer, schema);
             }
@@ -177,28 +212,22 @@ GO
             }
         }
         
-        private HashSet<string> CollectSchemaNames()
-        {
-            var res = new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
-
-            foreach (var obj in objects)
-            {
-                var schema = obj.Schema;
-
-                if (!String.IsNullOrEmpty(schema) &&
-                    !Constants.SystemSchemas.Contains(schema) &&
-                    !res.Contains(obj.Schema))
-                {
-                    res.Add(obj.Schema);
-                }
-            }
-
-            return res;
-        }
-
         protected string UnquoteIdentifier(string identifier)
         {
             return identifier.Trim('[', ']', '"');
+        }
+
+        internal static CustomAttributeData GetAttribute(MemberInfo member, string attributeName)
+        {
+            var atts = member.GetCustomAttributesData();
+            var att = atts.Where(a => a.AttributeType.FullName == attributeName).FirstOrDefault();
+            return att;
+        }
+
+        internal static object GetAttributeArgument(CustomAttributeData att, string name)
+        {
+            var arg = att.NamedArguments.Where(a => a.MemberName == name).FirstOrDefault();
+            return arg == null ? null : arg.TypedValue.Value;
         }
     }
 }

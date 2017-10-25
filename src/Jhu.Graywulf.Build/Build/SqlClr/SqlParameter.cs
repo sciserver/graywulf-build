@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Jhu.Graywulf.Build.SqlClr
 {
-    class Parameter
+    class SqlParameter
     {
         private string name;
         private Type type;
@@ -22,12 +22,12 @@ namespace Jhu.Graywulf.Build.SqlClr
             get { return type; }
         }
 
-        public Parameter()
+        public SqlParameter()
         {
             InitializeMembers();
         }
 
-        public Parameter(ParameterInfo parameter)
+        public SqlParameter(ParameterInfo parameter)
         {
             InitializeMembers();
 
@@ -48,7 +48,7 @@ namespace Jhu.Graywulf.Build.SqlClr
 
         public string GetSql(SqlClrReflector r)
         {
-            return String.Format("@{0} {1}", name, r.Types[type]);
+            return String.Format("@{0} {1}", name, r.Types[type.FullName]);
         }
     }
 }

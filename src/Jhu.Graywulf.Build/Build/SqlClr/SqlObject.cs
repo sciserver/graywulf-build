@@ -17,7 +17,7 @@ namespace Jhu.Graywulf.Build.SqlClr
         private string schema;
         private string name;
         private Type returnType;
-        private List<Parameter> parameters;
+        private List<SqlParameter> parameters;
 
         public abstract SqlObjectRank Rank { get; }
 
@@ -95,11 +95,11 @@ namespace Jhu.Graywulf.Build.SqlClr
 
             foreach (var att in atts)
             {
-                if (att.AttributeType == typeof(SqlUserDefinedAggregateAttribute))
+                if (att.AttributeType.FullName == typeof(SqlUserDefinedAggregateAttribute).FullName)
                 {
                     obj = new SqlAggregate(type);
                 }
-                else if (att.AttributeType == typeof(SqlUserDefinedTypeAttribute))
+                else if (att.AttributeType.FullName == typeof(SqlUserDefinedTypeAttribute).FullName)
                 {
                     obj = new SqlUserDefinedType(type);
                 }
@@ -120,7 +120,7 @@ namespace Jhu.Graywulf.Build.SqlClr
 
             foreach (var att in atts)
             {
-                if (att.AttributeType == typeof(SqlFunctionAttribute))
+                if (att.AttributeType.FullName == typeof(SqlFunctionAttribute).FullName)
                 {
                     obj = new SqlFunction(method);
                 }
@@ -198,16 +198,16 @@ namespace Jhu.Graywulf.Build.SqlClr
             {
                 if (parameters == null)
                 {
-                    parameters = new List<Parameter>();
+                    parameters = new List<SqlParameter>();
                 }
 
-                parameters.Add(new Parameter(parameter));
+                parameters.Add(new SqlParameter(parameter));
             }
         }
 
         protected string GetReturnTypeSql(SqlClrReflector r)
         {
-            return r.Types[returnType];
+            return r.Types[returnType.FullName];
         }
 
         protected string GetParametersSql(SqlClrReflector r)

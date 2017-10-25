@@ -11,7 +11,7 @@ namespace Jhu.Graywulf.Build.SqlClr
 {
     class SqlAggregate : SqlObject
     {
-        private List<Parameter> parameters;
+        private List<SqlParameter> parameters;
 
         public override SqlObjectRank Rank
         {

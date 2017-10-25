@@ -56,7 +56,7 @@ namespace Jhu.Graywulf.Build.Tasks
             var project = new Config.SolutionProject(solution)
             {
                 Path = System.IO.Path.Combine(ProjectDir, ProjectName),
-                Name = System.IO.Path.GetFileNameWithoutExtension(ProjectName),
+                Name = ProjectName,
                 AssemblyName = TargetName,
             };
 
