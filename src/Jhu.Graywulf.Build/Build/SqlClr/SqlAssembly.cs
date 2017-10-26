@@ -15,6 +15,8 @@ namespace Jhu.Graywulf.Build.SqlClr
         private string path;
         private AssemblySecurityLevel assemblySecurityLevel;
         private Dictionary<string, SqlAssembly> references;
+        private byte[] fileBytes;
+        private byte[] hashBytes;
 
         public string Name
         {
@@ -117,8 +119,32 @@ namespace Jhu.Graywulf.Build.SqlClr
             CollectReferences();
         }
 
+        private void WriteAsHex(byte[] buffer, TextWriter writer)
+        {
+            const string HexAlphabet = "0123456789ABCDEF";
+
+            for (int i = 0; i < buffer.Length; i ++)
+            {
+                byte b = buffer[i];
+                writer.Write(HexAlphabet[(int)(b >> 4)]);
+                writer.Write(HexAlphabet[(int)(b & 0xF)]);
+            }
+        }
+
         public void ScriptCreate(TextWriter writer)
         {
+            // Load assembly and compute hash
+            var algorithm = System.Security.Cryptography.HashAlgorithm.Create("SHA512");
+
+            fileBytes = File.ReadAllBytes(path);
+            hashBytes = algorithm.ComputeHash(fileBytes);
+
+            writer.Write(@"EXEC sp_add_trusted_assembly 0x");
+            WriteAsHex(hashBytes, writer);
+            writer.WriteLine();
+            writer.WriteLine("GO");
+            writer.WriteLine();
+
             writer.Write(
 @"
 IF (SELECT COUNT(*) FROM sys.assemblies WHERE name = '{0}') = 0
@@ -126,20 +152,7 @@ CREATE ASSEMBLY [{0}]
     AUTHORIZATION [dbo]
     FROM 0x",
                 name);
-
-            using (var infile = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                var buffer = new byte[0x10000];
-                int res;
-
-                while ((res = infile.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    for (int i = 0; i < res; i++)
-                    {
-                        writer.Write(BitConverter.ToString(buffer, i, 1));
-                    }
-                }
-            }
+            WriteAsHex(fileBytes, writer);
 
             writer.WriteLine();
             writer.WriteLine("WITH PERMISSION_SET = {0}",
@@ -160,6 +173,12 @@ GO
 
 ",
                 name);
+
+            writer.Write(@"EXEC sp_drop_trusted_assembly 0x");
+            WriteAsHex(hashBytes, writer);
+            writer.WriteLine();
+            writer.WriteLine("GO");
+            writer.WriteLine();
         }
 
         private SqlAssembly[] GetReferencedAssemblies()
