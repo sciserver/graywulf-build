@@ -42,9 +42,9 @@ namespace Jhu.Graywulf.Build.SqlClr
 
         protected override void ReflectAttributes(Type type)
         {
-            var att = (SqlUserDefinedTypeAttribute)type.GetCustomAttribute(typeof(SqlUserDefinedTypeAttribute));
+            var att = SqlClrReflector.GetAttribute(type, typeof(SqlUserDefinedTypeAttribute).FullName);
 
-            ReflectObjectName(att.Name);
+            ReflectObjectName((string)SqlClrReflector.GetAttributeArgument(att, "Name"));
         }
 
         public string GetSql()

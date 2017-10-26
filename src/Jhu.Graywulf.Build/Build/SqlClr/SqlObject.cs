@@ -124,6 +124,14 @@ namespace Jhu.Graywulf.Build.SqlClr
                 {
                     obj = new SqlFunction(method);
                 }
+                else if (att.AttributeType.FullName == typeof(SqlProcedureAttribute).FullName)
+                {
+                    obj = new SqlProcedure(method);
+                }
+                else if (att.AttributeType.FullName == typeof(SqlTriggerAttribute).FullName)
+                {
+                    obj = new SqlTrigger(method);
+                }
 
                 if (obj != null)
                 {

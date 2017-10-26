@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace Jhu.Graywulf
 {
-    class Dummy
+
+    // This is necessary to test branches that handle classes and
+    // function without Sql* attributes
+
+    public class Dummy
     {
+        public static void DummyFunction()
+        {
+        }
     }
 }

@@ -107,9 +107,11 @@
     <Compile Include="Build\SqlClr\SqlAggregate.cs" />
     <Compile Include="Build\SqlClr\SqlAssembly.cs" />
     <Compile Include="Build\SqlClr\SqlClrReflector.cs" />
+    <Compile Include="Build\SqlClr\SqlProcedure.cs" />
     <Compile Include="Build\SqlClr\SqlFunction.cs" />
     <Compile Include="Build\SqlClr\SqlObject.cs" />
     <Compile Include="Build\SqlClr\SqlParameter.cs" />
+    <Compile Include="Build\SqlClr\SqlTrigger.cs" />
     <Compile Include="Build\SqlClr\SqlUserDefinedType.cs" />
     <Compile Include="Build\Tasks\Configure.cs" />
     <Compile Include="Build\Tasks\GenerateSql.cs" />

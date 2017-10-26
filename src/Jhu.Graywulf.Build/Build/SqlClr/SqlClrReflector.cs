@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Jhu.Graywulf.Build.SqlClr
 {
-    class SqlClrReflector : MarshalByRefObject, IDisposable
+    internal class SqlClrReflector : MarshalByRefObject, IDisposable
     {
         private SqlAssembly assembly;
         private HashSet<string> schemas;

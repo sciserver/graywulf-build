@@ -75,7 +75,10 @@
   <ItemGroup>
     <Compile Include="Dummy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sql.cs" />
+    <Compile Include="UserAggregate.cs" />
+    <Compile Include="UserFunction.cs" />
+    <Compile Include="UserProcedure.cs" />
+    <Compile Include="UserType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

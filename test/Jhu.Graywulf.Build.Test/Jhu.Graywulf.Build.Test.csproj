@@ -88,6 +88,7 @@
     <Compile Include="Build\Config\SolutionProjectTest.cs" />
     <Compile Include="Build\Config\SolutionTest.cs" />
     <Compile Include="Build\Config\TestBase.cs" />
+    <Compile Include="Build\SqlClr\SqlClrReflectorTest.cs" />
     <Compile Include="Build\Tasks\InvokePSTest.cs" />
     <Compile Include="Build\Tasks\TestBuildEngine.cs" />
     <Compile Include="Build\Tasks\GenerateSqlTest.cs" />

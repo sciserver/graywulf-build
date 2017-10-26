@@ -8,13 +8,13 @@ using Microsoft.SqlServer.Server;
 
 namespace Jhu.Graywulf
 {
-    public class Sql
+    [Serializable]
+    public class UserProcedure
     {
-        [SqlFunction(Name = "region.Area",
-            DataAccess = DataAccessKind.None, IsDeterministic = true, IsPrecise = false)]
-        public static SqlDouble Area(SqlBytes bytes)
+        [SqlProcedure(Name = "dbo.ClrProdecure")]
+        public static SqlInt32 ClrProcedure(SqlInt32 input)
         {
-            return 0;
+            return input;
         }
     }
 }

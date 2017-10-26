@@ -75,12 +75,12 @@ namespace Jhu.Graywulf.Build.SqlClr
             ReflectObjectName((string)SqlClrReflector.GetAttributeArgument(att, "Name"));
             ReflectParameters(method);
 
-            /*if (method.ReturnType == typeof(System.Collections.IEnumerable))
+            if (method.ReturnType.FullName == typeof(System.Collections.IEnumerable).FullName)
             {
                 isTableValued = true;
-                tableDefinition = att.TableDefinition;
-                fillRowMethodName = att.FillRowMethodName;
-            }*/
+                tableDefinition = (string)SqlClrReflector.GetAttributeArgument(att, "TableDefinition");
+                fillRowMethodName = (string)SqlClrReflector.GetAttributeArgument(att, "FillRowMethodName");
+            }
         }
 
         public override void ScriptCreate(SqlClrReflector r, TextWriter writer)

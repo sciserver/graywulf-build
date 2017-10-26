@@ -9,54 +9,57 @@ using Microsoft.SqlServer.Server;
 
 namespace Jhu.Graywulf.Build.SqlClr
 {
-    class SqlAggregate : SqlObject
+    class SqlProcedure : SqlObject
     {
-        private List<SqlParameter> parameters;
-
         public override SqlObjectRank Rank
         {
-            get { return SqlObjectRank.Aggregate; }
+            get { return SqlObjectRank.Procedure; }
         }
 
-        public SqlAggregate()
+        public SqlProcedure()
         {
             InitializeMembers();
         }
 
-        public SqlAggregate(SqlAggregate old)
-            :base(old)
+        public SqlProcedure(SqlObject old)
+            : base(old)
+        {
+            InitializeMembers();
+        }
+
+        public SqlProcedure(SqlProcedure old)
+            : base(old)
         {
             CopyMembers(old);
         }
 
-        public SqlAggregate(Type type)
-            :base(type)
+        public SqlProcedure(MethodInfo method)
+            :base(method)
         {
         }
 
         private void InitializeMembers()
         {
-            this.parameters = null;
         }
 
-        private void CopyMembers(SqlAggregate old)
+        private void CopyMembers(SqlProcedure old)
         {
-            this.parameters = old.parameters;
         }
 
-        protected override void ReflectType(Type type)
+        protected override void ReflectMethod(MethodInfo method)
         {
-            base.ReflectType(type);
-            
-            ReflectReturnType(type.GetMethod("Terminate"));
+            base.ReflectMethod(method);
+            ReflectReturnType(method);
         }
 
-        protected override void ReflectAttributes(Type type)
+        protected override void ReflectAttributes(MethodInfo method)
         {
-            var att = SqlClrReflector.GetAttribute(type, typeof(SqlUserDefinedAggregateAttribute).FullName);
+            base.ReflectAttributes(method);
+
+            var att = SqlClrReflector.GetAttribute(method, typeof(SqlProcedureAttribute).FullName);
 
             ReflectObjectName((string)SqlClrReflector.GetAttributeArgument(att, "Name"));
-            ReflectParameters(type.GetMethod("Accumulate"));
+            ReflectParameters(method);
         }
 
         public override void ScriptCreate(SqlClrReflector r, TextWriter writer)
@@ -64,10 +67,10 @@ namespace Jhu.Graywulf.Build.SqlClr
             ScriptDrop(r, writer);
 
             writer.Write(@"
-CREATE AGGREGATE [{0}].[{1}]
+CREATE PROCEDURE [{0}].[{1}]
 ({2})
-RETURNS {3}
- EXTERNAL NAME [{4}].[{5}]
+AS
+ EXTERNAL NAME [{3}].[{4}].[{5}]
 
 GO
 
@@ -75,9 +78,9 @@ GO
                 Schema,
                 Name,
                 GetParametersSql(r),
-                GetReturnTypeSql(r),
                 AssemblyName,
-                ClassName);
+                ClassName,
+                MethodName);
         }
 
         public override void ScriptDrop(SqlClrReflector r, TextWriter writer)
@@ -85,7 +88,7 @@ GO
             writer.Write(@"
 IF (OBJECT_ID('{0}.{1}') IS NOT NULL)
 BEGIN
-    DROP AGGREGATE [{0}].[{1}]
+    DROP PROCEDURE [{0}].[{1}]
 END
 
 GO

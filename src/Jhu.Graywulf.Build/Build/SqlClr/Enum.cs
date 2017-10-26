@@ -17,6 +17,8 @@ namespace Jhu.Graywulf.Build.SqlClr
     {
         UserDefinedType = 0,
         Function = 1,
-        Aggregate = 2
+        Aggregate = 2,
+        Procedure = 3,
+        Trigger = 4,
     }
 }
