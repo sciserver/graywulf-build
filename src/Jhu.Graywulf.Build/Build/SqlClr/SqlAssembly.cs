@@ -139,6 +139,7 @@ namespace Jhu.Graywulf.Build.SqlClr
             fileBytes = File.ReadAllBytes(path);
             hashBytes = algorithm.ComputeHash(fileBytes);
 
+            writer.WriteLine(@"IF OBJECT_ID('sp_add_trusted_assembly') IS NOT NULL");
             writer.Write(@"EXEC sp_add_trusted_assembly 0x");
             WriteAsHex(hashBytes, writer);
             writer.WriteLine();
@@ -174,6 +175,7 @@ GO
 ",
                 name);
 
+            writer.WriteLine(@"IF OBJECT_ID('sp_drop_trusted_assembly') IS NOT NULL");
             writer.Write(@"EXEC sp_drop_trusted_assembly 0x");
             WriteAsHex(hashBytes, writer);
             writer.WriteLine();
