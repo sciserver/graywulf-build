@@ -12,6 +12,7 @@ namespace Jhu.Graywulf.Build.Tasks
         private string solutionDir;
         private string solutionName;
         private string configurationName;
+        private string platformName;
         private string projectDir;
         private string projectName;
         private string targetName;
@@ -40,6 +41,13 @@ namespace Jhu.Graywulf.Build.Tasks
         {
             get { return configurationName; }
             set { configurationName = value; }
+        }
+
+        [Required]
+        public string PlatformName
+        {
+            get { return platformName; }
+            set { platformName = value; }
         }
 
         [Required]
@@ -89,6 +97,7 @@ namespace Jhu.Graywulf.Build.Tasks
             this.solutionDir = null;
             this.solutionName = null;
             this.configurationName = null;
+            this.platformName = null;
             this.projectDir = null;
             this.projectName = null;
             this.targetName = null;

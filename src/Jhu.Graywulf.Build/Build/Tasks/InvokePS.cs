@@ -54,6 +54,7 @@ namespace Jhu.Graywulf.Build.Tasks
                 iss.Variables.Add(new SessionStateVariableEntry("SolutionDir", SolutionDir, null));
                 iss.Variables.Add(new SessionStateVariableEntry("SolutionName", SolutionName, null));
                 iss.Variables.Add(new SessionStateVariableEntry("ConfigurationName", ConfigurationName, null));
+                iss.Variables.Add(new SessionStateVariableEntry("PlatformName", PlatformName, null));
                 iss.Variables.Add(new SessionStateVariableEntry("ProjectDir", ProjectDir, null));
                 iss.Variables.Add(new SessionStateVariableEntry("ProjectName", ProjectName, null));
                 iss.Variables.Add(new SessionStateVariableEntry("TargetName", TargetName, null));
