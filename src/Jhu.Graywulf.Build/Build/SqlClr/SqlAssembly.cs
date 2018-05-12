@@ -131,7 +131,7 @@ namespace Jhu.Graywulf.Build.SqlClr
             }
         }
 
-        public void ScriptCreate(TextWriter writer)
+        public void ScriptCreate(TextWriter writer, bool handleError)
         {
             // Load assembly and compute hash
             var algorithm = System.Security.Cryptography.HashAlgorithm.Create("SHA512");
@@ -139,12 +139,23 @@ namespace Jhu.Graywulf.Build.SqlClr
             fileBytes = File.ReadAllBytes(path);
             hashBytes = algorithm.ComputeHash(fileBytes);
 
-            writer.WriteLine(@"IF OBJECT_ID('sp_add_trusted_assembly') IS NOT NULL");
-            writer.Write(@"EXEC sp_add_trusted_assembly 0x");
+            // Add hash
+
+            writer.Write(
+@"
+IF OBJECT_ID('sp_add_trusted_assembly') IS NOT NULL
+BEGIN
+	DECLARE @hash varbinary(64) = 0x");
             WriteAsHex(hashBytes, writer);
             writer.WriteLine();
+            writer.WriteLine(
+@"  IF (SELECT COUNT(*) FROM sys.trusted_assemblies WHERE hash = @hash) = 0
+		EXEC sp_add_trusted_assembly @hash
+END");           
             writer.WriteLine("GO");
             writer.WriteLine();
+
+            // Create assembly
 
             writer.Write(
 @"
@@ -164,21 +175,46 @@ CREATE ASSEMBLY [{0}]
             writer.WriteLine();
         }
 
-        public void ScriptDrop(TextWriter writer)
+        public void ScriptDrop(TextWriter writer, bool handleError)
         {
-            writer.Write(@"
-IF (SELECT COUNT(*) FROM sys.assemblies WHERE name = '{0}') > 0
-DROP ASSEMBLY [{0}]
+            // Drop assembly
 
-GO
+            if (handleError)
+            {
+                writer.WriteLine("BEGIN TRY");
+            }
+            
+            writer.Write(@"
+    IF (SELECT COUNT(*) FROM sys.assemblies WHERE name = '{0}') > 0
+    DROP ASSEMBLY [{0}]
 
 ",
                 name);
 
-            writer.WriteLine(@"IF OBJECT_ID('sp_drop_trusted_assembly') IS NOT NULL");
-            writer.Write(@"EXEC sp_drop_trusted_assembly 0x");
+            // Drop hash
+
+            writer.Write(
+@"
+    IF OBJECT_ID('sp_drop_trusted_assembly') IS NOT NULL
+    BEGIN
+        DECLARE @hash varbinary(64) = 0x");
             WriteAsHex(hashBytes, writer);
             writer.WriteLine();
+            writer.WriteLine(
+@"
+        IF (SELECT COUNT(*) FROM sys.trusted_assemblies WHERE hash = @hash) > 0
+            EXEC sp_drop_trusted_assembly @hash 
+    END");
+
+            if (handleError)
+            {
+                writer.WriteLine(
+@"END TRY  
+BEGIN CATCH  
+     PRINT 'An error occured while dropping assembly but it is ignored.'
+END CATCH");
+            }
+
             writer.WriteLine("GO");
             writer.WriteLine();
         }

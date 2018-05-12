@@ -50,7 +50,7 @@ namespace Jhu.Graywulf.Build.SqlClr
         }
 
         public SqlClrReflector(Assembly assembly, AssemblySecurityLevel sec)
-            :this()
+            : this()
         {
             CollectObjects(assembly, sec);
         }
@@ -141,10 +141,10 @@ namespace Jhu.Graywulf.Build.SqlClr
 
             foreach (var a in assembly.References.Values)
             {
-                a.ScriptCreate(writer);
+                a.ScriptCreate(writer, true);
             }
 
-            assembly.ScriptCreate(writer);
+            assembly.ScriptCreate(writer, false);
 
             foreach (var obj in objects.OrderBy(i => i.Rank))
             {
@@ -167,12 +167,12 @@ namespace Jhu.Graywulf.Build.SqlClr
                 obj.ScriptDrop(this, writer);
             }
 
-            assembly.ScriptDrop(writer);
+            assembly.ScriptDrop(writer, false);
 
             foreach (var a in assembly.References.Values.Reverse())
             {
-                a.ScriptDrop(writer);
-            }   
+                a.ScriptDrop(writer, true);
+            }
 
             foreach (var schema in schemas)
             {
@@ -211,7 +211,7 @@ GO
                    schema);
             }
         }
-        
+
         protected string UnquoteIdentifier(string identifier)
         {
             return identifier.Trim('[', ']', '"');
